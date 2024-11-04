@@ -1,6 +1,6 @@
-# SofeWarePratice
+# SofeWarePratice(Parkinglot Management System)
 
-### DataBase used in this project
+### DataBase Used in This Troject
 
 ``` SQL
 DROP TABLE IF EXISTS `parkinglot_managent`;
@@ -84,4 +84,46 @@ INSERT INTO `user` (user_id, user_name, user_password, user_sex, user_email, use
 alter table user change `user_password` `user_password` VARCHAR(100) NOT NULL ;
 
 alter table `user` change `user_id` `user_id` INT NOT NULL AUTO_INCREMENT   ;
+```
+
+### Interface Between Front and Backend 
+#### UserController
+Request Method: **POST** 
+
+Request URL:"http://localhost:8080/user/regist"
+``` json
+{
+    "userName":"littlebug1", //用户名
+    "userPassword":"123456",     //明文密码
+    "userEmail":"3185153802@qq.com",
+    "userSex":"1",
+    "userCreateTime":"2024-11-01T12:00:00.000+08:00"
+}
+```
+Response
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": null
+}
+```
+Request Method: **POST**
+
+Request URL: "http://localhost:8080/user/login"
+```json
+{
+    "userName":"littlebug",     //用户名
+    "userPassword":"123456"     //明文密码
+}
+```
+Response
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "token": "eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDc2MDewNDU20lEqLU4t8kxRsjKqBQBToAFqLwAAAA.jaIyV9pN0d2TjP_oM2pel0EIhE427mNwgcVVxisc9vlVnyuFtig8njPtFryf4G92Dl66o-7pPUe1fdRA22foDA"
+    }
+}
 ```
