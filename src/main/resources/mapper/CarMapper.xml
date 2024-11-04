@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.CarMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.Car">
+            <id property="carId" column="car_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="parkingStatus" column="parking_status" jdbcType="TINYINT"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        car_id,user_id,parking_status,
+        version,is_deleted
+    </sql>
+</mapper>

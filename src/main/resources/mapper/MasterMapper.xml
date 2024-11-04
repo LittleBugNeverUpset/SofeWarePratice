@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.MasterMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.Master">
+            <id property="masterId" column="master_id" jdbcType="INTEGER"/>
+            <result property="masterAccount" column="master_account" jdbcType="VARCHAR"/>
+            <result property="masterName" column="master_name" jdbcType="VARCHAR"/>
+            <result property="masterPassword" column="master_password" jdbcType="VARCHAR"/>
+            <result property="masterPermissionLevel" column="master_permission_level" jdbcType="INTEGER"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        master_id,master_account,master_name,
+        master_password,master_permission_level,version,
+        is_deleted
+    </sql>
+</mapper>

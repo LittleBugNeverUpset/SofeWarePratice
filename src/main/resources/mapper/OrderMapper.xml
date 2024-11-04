@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.Order">
+            <id property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+            <result property="orderStartTime" column="order_start_time" jdbcType="TIMESTAMP"/>
+            <result property="orderEndTime" column="order_end_time" jdbcType="TIMESTAMP"/>
+            <result property="parkinglotId" column="parkinglot_id" jdbcType="INTEGER"/>
+            <result property="carId" column="car_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="orderValue" column="order_value" jdbcType="DOUBLE"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        order_id,order_status,order_start_time,
+        order_end_time,parkinglot_id,car_id,
+        user_id,order_value,version,
+        is_deleted
+    </sql>
+</mapper>
