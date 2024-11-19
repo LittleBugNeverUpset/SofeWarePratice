@@ -2,6 +2,7 @@ package com.chy.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.pojo.User;
 import com.chy.service.UserService;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 /**
 * @author littlebug
@@ -77,7 +80,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //1.判定是否有效期
         if (jwtHelper.isExpiration(token)) {
             //true过期,直接返回未登录
-            return Result.build(null,ResultCodeEnum.NOTLOGIN);
+            return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
         }
 
         //2.获取token对应的用户
@@ -93,7 +96,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return Result.ok(data);
         }
 
-        return Result.build(null,ResultCodeEnum.NOTLOGIN);
+        return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
     }
     /**
      * 检查账号是否可以注册
@@ -128,6 +131,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         int rows = userMapper.insert(user);
         System.out.println("rows = " + rows);
         return Result.ok(null);
+    }
+
+
+    @Override
+    public Result updateUserInfo(User user,String token) {
+        if (jwtHelper.isExpiration(token)) {
+            //true过期,直接返回未登录
+            return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
+        }
+        userMapper.updateById(user);
+        if (user != null) {
+            user.getUserPassword();
+            Map data = new HashMap();
+            data.put("loginUser",user);
+            return Result.ok(data);
+        }
+        //2.获取token对应的用户
+        int userId = jwtHelper.getUserId(token).intValue();
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserId,userId);
+
+        int ifUpdate = userMapper.update(user,queryWrapper);
+//        return Result.build(null,ResultCodeEnum.UPDATE_FIELD);
     }
 
 }

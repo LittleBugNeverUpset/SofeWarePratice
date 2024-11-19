@@ -3,6 +3,7 @@ package com.chy.controller;
 import com.chy.pojo.User;
 import com.chy.service.UserService;
 import com.chy.utils.Result;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -121,6 +122,12 @@ public class UserController {
     @PostMapping("regist")
     public Result regist(@RequestBody User user){
         Result result = userService.regist(user);
+        return result;
+    }
+
+    @PutMapping("update")
+    public Result update(@RequestBody User user,@RequestHeader String token){
+        Result result = userService.updateUserInfo(user,token);
         return result;
     }
 
