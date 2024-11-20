@@ -153,7 +153,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq(User::getUserId,userId);
 
         int ifUpdate = userMapper.update(user,queryWrapper);
-//        return Result.build(null,ResultCodeEnum.UPDATE_FIELD);
+        return Result.build(null,ResultCodeEnum.UPDATE_FIELD);
     }
 
 }

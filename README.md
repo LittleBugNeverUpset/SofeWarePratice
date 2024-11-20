@@ -88,6 +88,7 @@ alter table `user` change `user_id` `user_id` INT NOT NULL AUTO_INCREMENT   ;
 
 ### Interface Between Front and Backend 
 #### UserController
+##### Regist
 Request Method: **POST** 
 
 Request URL:"http://localhost:8080/user/regist"
@@ -108,6 +109,7 @@ Response
     "data": null
 }
 ```
+##### Login
 Request Method: **POST**
 
 Request URL: "http://localhost:8080/user/login"
@@ -127,3 +129,96 @@ Response
     }
 }
 ```
+##### CheckUserName
+Request Method: **POST**
+Request URL: "http://localhost:8080/user/checkUserName"
+``` bash
+http://localhost:8080/user/checkUserName?username=littlebug1
+```
+
+Response
+``` json
+{
+    "code": 505,
+    "message": "userNameUsed",
+    "data": null
+}
+```
+
+##### getUserInfo
+
+Request Method: **GET**
+
+Request URL :"http://localhost:8080/user/getUserInfo"
+
+``` JSON
+HEADER: "token":"eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDc2MjQyNTU21VEqLU4t8kxRsjKqBQBwX6QeLwAAAA.Pv2F7Rt-eKTCeLkccWD79yCWi4O6IWWGoklEDJa0fLckHlhk-OgHxYDv_m_YqKuo6P-dtYHUsfG3s3KSigdpyw"
+```
+
+Response
+``` json
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "loginUser": {
+            "userId": 2,
+            "userName": "littlebug1",
+            "userPassword": "e10adc3949ba59abbe56e057f20f883e",
+            "userSex": 1,
+            "userEmail": "3185153802@qq.com",
+            "userCreateTime": "2024-11-01T04:00:00.000+00:00",
+            "userIcon": null,
+            "version": 1,
+            "isDeleted": 0
+        }
+    }
+}
+```
+
+##### update
+
+Request Method: **PUT**
+Request URL: ""
+
+``` json
+
+{
+    "userName":"littlebug1", //用户名
+    "userPassword":"123456",     //明文密码
+    "userEmail":"493457392@qq.com",
+    "userSex":"1",
+    "userCreateTime":"2024-11-01T12:00:00.000+08:00"
+}
+HEADER: "token":"eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDc2MjQyNTU21VEqLU4t8kxRsjKqBQBwX6QeLwAAAA.Pv2F7Rt-eKTCeLkccWD79yCWi4O6IWWGoklEDJa0fLckHlhk-OgHxYDv_m_YqKuo6P-dtYHUsfG3s3KSigdpyw"
+
+```
+
+Response
+
+``` JSON
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "loginUser": {
+            "userId": null,
+            "userName": "littlebug1",
+            "userPassword": "123456",
+            "userSex": 1,
+            "userEmail": "493457392@qq.com",
+            "userCreateTime": "2024-11-01T04:00:00.000+00:00",
+            "userIcon": null,
+            "version": null,
+            "isDeleted": null
+        }
+    }
+}
+```
+
+
+#### MasterController
+
+##### Login
+##### Regist
+##### getUserList
