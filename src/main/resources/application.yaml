@@ -2,14 +2,14 @@
 server:
   port: 8080
   servlet:
-    context-path: /
+    context-path: /ParkingLotManagement
 
 # 连接池配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://littlelittlebug.icu:3306/parkinglot_managent
+      url: jdbc:mysql://littlelittlebug.icu:3306/parkinglot_management
       username: root
       password: 797789
       driver-class-name: com.mysql.cj.jdbc.Driver

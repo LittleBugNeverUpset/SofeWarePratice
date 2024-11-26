@@ -2,6 +2,7 @@ package com.chy.service;
 
 import com.chy.pojo.Car;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chy.utils.Result;
 
 /**
 * @author littlebug
@@ -10,4 +11,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface CarService extends IService<Car> {
 
+    Result bindCarToUser(Car car, String token);
+
+    Result deleteCar(String token, String carPlateNumber);
+
+    Result updateCarInfo(Car car, String token);
 }

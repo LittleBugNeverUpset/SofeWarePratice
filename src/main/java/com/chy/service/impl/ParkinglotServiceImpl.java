@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.pojo.Parkinglot;
 import com.chy.service.ParkinglotService;
 import com.chy.mapper.ParkinglotMapper;
+import com.chy.utils.Result;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author littlebug
@@ -15,6 +18,10 @@ import org.springframework.stereotype.Service;
 public class ParkinglotServiceImpl extends ServiceImpl<ParkinglotMapper, Parkinglot>
     implements ParkinglotService{
 
+    @Override
+    public Result addParkinglots(String token, List<Parkinglot> parkinglots) {
+        return null;
+    }
 }
 
 

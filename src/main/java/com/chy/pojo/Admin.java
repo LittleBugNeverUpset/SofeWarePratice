@@ -6,16 +6,21 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * @TableName distract
+ * @TableName admin
  */
+@TableName(value ="admin")
 @Data
-public class Distract implements Serializable {
+public class Admin implements Serializable {
     @TableId
-    private Integer distractId;
+    private Integer adminId;
 
-    private Integer cityId;
+    private String adminAccount;
 
-    private String cityName;
+    private String adminName;
+
+    private String adminPassword;
+
+    private Integer adminPermissionLevel;
 
     @Version
     private Integer version;

@@ -1,5 +1,6 @@
 package com.chy.service;
 
+import com.chy.pojo.Car;
 import com.chy.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chy.utils.Result;
@@ -22,4 +23,9 @@ public interface UserService extends IService<User> {
 //    Result getAllUsers(String token);
 
     Result updateUserInfo(User user,String token);
+
+    Result checkUserEmail(String email);
+
+
+    Result deleteUserAccount(String token);
 }

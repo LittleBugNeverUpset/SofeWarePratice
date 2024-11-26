@@ -2,6 +2,9 @@ package com.chy.service;
 
 import com.chy.pojo.Parkinglot;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chy.utils.Result;
+
+import java.util.List;
 
 /**
 * @author littlebug
@@ -10,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ParkinglotService extends IService<Parkinglot> {
 
+    Result addParkinglots(String token, List<Parkinglot> parkinglots);
 }

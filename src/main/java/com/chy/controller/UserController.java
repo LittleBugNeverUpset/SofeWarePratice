@@ -1,12 +1,18 @@
 package com.chy.controller;
 
+import com.chy.mapper.FacilitiesMapper;
+import com.chy.pojo.Car;
+import com.chy.pojo.Order;
 import com.chy.pojo.User;
+import com.chy.service.CarService;
+import com.chy.service.FacilitiesService;
 import com.chy.service.UserService;
 import com.chy.utils.Result;
-import org.apache.ibatis.annotations.Update;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@Tag(name = "用户服务接口", description = "")
 @RestController
 @RequestMapping("user")
 @CrossOrigin
@@ -15,120 +21,114 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CarService carService;
+    @Autowired
+    private FacilitiesService facilitiesService;
 
     /**
-     * 登录需求
-     * 地址: /user/login
-     * 方式: post
-     * 参数:
-     *    {
-     *     "username":"zhangsan", //用户名
-     *     "userPwd":"123456"     //明文密码
-     *    }
-     * 返回:
-     *   {
-     *    "code":"200",         // 成功状态码
-     *    "message":"success"   // 成功状态描述
-     *    "data":{
-     *         "token":"... ..." // 用户id的token
-     *     }
-     *  }
+     * User自身操作模块
      *
-     * 大概流程:
-     *    1. 账号进行数据库查询 返回用户对象
-     *    2. 对比用户密码(md5加密)
-     *    3. 成功,根据userId生成token -> map key=token value=token值 - result封装
-     *    4. 失败,判断账号还是密码错误,封装对应的枚举错误即可
      */
-    @PostMapping("login")
-    public Result login(@RequestBody User user){
-        Result result = userService.login(user);
-        System.out.println("result = " + result);
-        return result;
-    }
-    /**
-     * 地址: user/getUserInfo
-     * 方式: get
-     * 请求头: token = token内容
-     * 返回:
-     *    {
-     *     "code": 200,
-     *     "message": "success",
-     *     "data": {
-     *         "loginUser": {
-     *             "uid": 1,
-     *             "username": "zhangsan",
-     *             "userPwd": "",
-     *             "nickName": "张三"
-     *         }
-     *      }
-     *   }
-     *
-     * 大概流程:
-     *    1.获取token,解析token对应的userId
-     *    2.根据userId,查询用户数据
-     *    3.将用户数据的密码置空,并且把用户数据封装到结果中key = loginUser
-     *    4.失败返回504 (本次先写到当前业务,后期提取到拦截器和全局异常处理器)
-     */
-    @GetMapping("getUserInfo")
-    public Result userInfo(@RequestHeader String token){
-        Result result = userService.getUserInfo(token);
-        return result;
-    }
-    /**
-     * url地址：user/checkUserName
-     * 请求方式：POST
-     * 请求参数：param形式
-     * username=zhangsan
-     * 响应数据:
-     * {
-     *    "code":"200",
-     *    "message":"success"
-     *    "data":{}
-     * }
-     *
-     * 实现步骤:
-     *   1. 获取账号数据
-     *   2. 根据账号进行数据库查询
-     *   3. 结果封装
-     */
+    @Operation(summary = "检查用户名称是否已经使用", description = "检查用户名称是否已经使用，根据返回结果选择是否在前端拦截请求")
     @PostMapping("checkUserName")
     public Result checkUserName(String username){
         Result result = userService.checkUserName(username);
         return result;
     }
-    /**
-     * url地址：user/regist
-     * 请求方式：POST
-     * 请求参数：
-     * {
-     *     "username":"zhangsan",
-     *     "userPwd":"123456",
-     *     "nickName":"张三"
-     * }
-     * 响应数据：
-     * {
-     *    "code":"200",
-     *    "message":"success"
-     *    "data":{}
-     * }
-     *
-     * 实现步骤:
-     *   1. 将密码加密
-     *   2. 将数据插入
-     *   3. 判断结果,成 返回200 失败 505
-     */
-
+    @Operation(summary = "检查用户邮箱是否已经使用", description = "检查用户邮箱是否已经使用，根据返回结果选择是否在前端拦截请求")
+    @PostMapping("checkUserEmail")
+    public Result checkUserEmail(String email){
+        Result result = userService.checkUserEmail(email);
+        return result;
+    }
+    @Operation(summary = "用户注册接口", description = "")
     @PostMapping("regist")
     public Result regist(@RequestBody User user){
         Result result = userService.regist(user);
         return result;
     }
 
-    @PutMapping("update")
-    public Result update(@RequestBody User user,@RequestHeader String token){
+    @Operation(summary = "用户登录并获取token", description = "获取到的token是后面用户操作的身份凭证，请获取后保持保留")
+    @PostMapping("login")
+    public Result login(@RequestBody User user){
+        Result result = userService.login(user);
+        System.out.println("result = " + result);
+        return result;
+    }
+
+    @Operation(summary = "登陆成功使用token获取本用户的相关信息", description = "")
+    @GetMapping("getUserInfo")
+    public Result userInfo(@RequestHeader String token){
+        Result result = userService.getUserInfo(token);
+        return result;
+    }
+    @Operation(summary = "用户更新自己的信息", description = "不需要更新的信息需要使用getUserInfo获取用户信息将不更新的信息填充进去")
+    @PutMapping("updateUserInfo")
+    public Result updateUserInfo(@RequestBody User user,@RequestHeader String token){
         Result result = userService.updateUserInfo(user,token);
         return result;
     }
+
+    @Operation(summary = "用户销号删除自己的信息", description = "建议前端设置确认页面让用户思考清楚")
+    @DeleteMapping("account")
+    public Result deleteAccount(String token){
+        Result result = userService.deleteUserAccount(token);
+        return result;
+    }
+
+    /**
+     *User获取服务模块
+     */
+
+    @Operation(summary = "录入车辆绑定用户", description = "")
+    @PostMapping("car")
+    public Result addVehicle(@RequestBody Car car, @RequestHeader String token){
+        Result result = carService.bindCarToUser(car, token);
+        return result;
+    }
+
+    @Operation(summary = "更该车辆信息", description = "不修改的字段为null，不能修改ID")
+    @PutMapping("car")
+    public Result updateCar(@RequestBody Car car, @RequestHeader String token){
+        Result result = carService.updateCarInfo(car,token);
+        return result;
+    }
+
+    @Operation(summary = "解除用户与车辆的绑定关系", description = "")
+    @DeleteMapping("car")
+    public Result deleteCar(@RequestHeader String token,String carPlateNumber){
+        Result result = carService.deleteCar(token,carPlateNumber);
+        return result;
+    }
+
+    @Operation(summary = "获取所有便民设施列表", description = "")
+    @GetMapping("allFacilities")
+    public Result getAllFacilities(String token){
+        Result result = facilitiesService.getAllFacilities(token);
+        return result;
+    }
+
+    /**
+     * 订单模块模块
+     */
+    @Operation(summary = "生成初始订单", description = "")
+    @PostMapping("order")
+    public Result addOrder(@RequestBody Order order, @RequestHeader String token){
+        return null;
+    }
+
+    @Operation(summary = "业务过程中更新订单", description = "")
+    @PutMapping("order")
+    public Result updateOrder(@RequestBody Order order, @RequestHeader String token){
+        return null;
+    }
+    @Operation(summary = "流程结束生成完整订单", description = "")
+    @PutMapping("finishedOrder")
+    public Result updateFinishedOrder(@RequestBody Order order, @RequestHeader String token){
+        return null;
+    }
+
+
 
 }

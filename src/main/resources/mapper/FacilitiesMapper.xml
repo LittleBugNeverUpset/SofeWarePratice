@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.FacilitiesMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.Facilities">
+            <id property="facilitiesId" column="facilities_id" jdbcType="INTEGER"/>
+            <result property="parkinglotId" column="parkinglot_id" jdbcType="INTEGER"/>
+            <result property="facilitiesName" column="facilities_name" jdbcType="VARCHAR"/>
+            <result property="facilitiesType" column="facilities_type" jdbcType="OTHER"/>
+            <result property="facilitiesCoordinates" column="facilities_coordinates" jdbcType="INTEGER"/>
+            <result property="facilitiesStatus" column="facilities_status" jdbcType="OTHER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        facilities_id,parkinglot_id,facilities_name,
+        facilities_type,facilities_coordinates,facilities_status
+    </sql>
+</mapper>

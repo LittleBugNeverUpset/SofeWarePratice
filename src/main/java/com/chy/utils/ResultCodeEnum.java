@@ -9,14 +9,22 @@ public enum ResultCodeEnum {
     SUCCESS(200,"success"),
 //    NOTLOGIN(501,"notLogin"),
     UNAUTHROIZED(501,"Unauthorized"),
-    UPDATE_FIELD(502,"Feild to update Information"),
-    USERNAME_ERROR(503,"usernameError"),
-    PASSWORD_ERROR(504,"passwordError"),
-    USERNAME_USED(505,"userNameUsed"),
+    UPDATE_FIELD_FAILED(502,"Feild to update Information"),
+    USERNAME_ERROR(503,"username Error"),
+    PASSWORD_ERROR(504,"password Error"),
+    USERNAME_USED(505,"user Name Used"),
+    USEREMAIL_USED(506,"user Email Used"),
+    INVALID_PARAMS(507,"invalid Params"),
+    FORBIDDEN(508,"forbidden to update Other User"),
+    USER_NOT_FOUND(509,"user Not Found"),
+    CREATE_FAILED(510,"create Failed"),
+    CAR_NOT_EXIST(511,"car not Exist"),
+    INSERT_FAILD(512,"insert Failed" ),
     //masterResult
-    MASTERNAME_ERROR(520,"masternameError"),
-    MASTERNAME_USED(521,"masterNameUsed"),
-    QUERYINDEX_ERROR(522,"queryIndexError");
+    MASTERNAME_ERROR(520,"mastername Error"),
+    MASTERNAME_USED(521,"master NameUsed"),
+    QUERYINDEX_ERROR(522,"query Index Error");
+
 
     private Integer code;
     private String message;

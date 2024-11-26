@@ -4,6 +4,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chy.pojo.Car;
 import com.chy.pojo.User;
 import com.chy.service.UserService;
 import com.chy.mapper.UserMapper;
@@ -135,26 +136,81 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
-    public Result updateUserInfo(User user,String token) {
+    public Result updateUserInfo(User user, String token) {
+        // 获取 token 对应的用户 ID
+        int userId = jwtHelper.getUserId(token).intValue();
+
+        if (jwtHelper.isExpiration(token)) {
+            // Token 过期，直接返回未登录
+            return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
+        }
+
+        if (user == null || user.getUserId() == null) {
+            return Result.build(null, ResultCodeEnum.INVALID_PARAMS);
+        }
+
+        // 校验 userId 是否一致，确保用户只能更新自己的信息
+        if (userId != user.getUserId()) {
+            return Result.build(null, ResultCodeEnum.FORBIDDEN); // 不允许更新其他用户信息
+        }
+
+        // 这里可以检查用户是否更改了密码，如果没有更改，不更新密码
+        if (user.getUserPassword() != null && !user.getUserPassword().isEmpty()) {
+            // 进行密码加密等操作
+        }
+
+        // 使用 LambdaQueryWrapper 进行条件更新
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserId, userId); // 只更新当前用户的信息
+
+        // 执行更新
+        int updateCount = userMapper.update(user, queryWrapper);
+        if (updateCount == 0) {
+            return Result.build(null, ResultCodeEnum.UPDATE_FIELD_FAILED); // 如果没有记录被更新
+        }
+
+        // 获取更新后的用户信息
+        User updatedUser = userMapper.selectById(userId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("loginUser", updatedUser);
+
+        return Result.ok(data);
+    }
+
+    @Override
+    public Result checkUserEmail(String email) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserEmail,email);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user != null){
+            return Result.build(null,ResultCodeEnum.USEREMAIL_USED);
+        }
+        return Result.ok(null);
+    }
+
+    @Override
+    public Result deleteUserAccount(String token) {
+        //1.判定是否有效期
         if (jwtHelper.isExpiration(token)) {
             //true过期,直接返回未登录
             return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
         }
-        userMapper.updateById(user);
-        if (user != null) {
-            user.getUserPassword();
-            Map data = new HashMap();
-            data.put("loginUser",user);
-            return Result.ok(data);
-        }
+
         //2.获取token对应的用户
         int userId = jwtHelper.getUserId(token).intValue();
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserId,userId);
 
-        int ifUpdate = userMapper.update(user,queryWrapper);
-        return Result.build(null,ResultCodeEnum.UPDATE_FIELD);
+        //3.查询数据
+        User user = userMapper.selectById(userId);
+
+        if (user != null) {
+            user.setIsDeleted(1);  // 设置为已删除
+            userMapper.updateById(user);
+            return Result.ok(user);
+        }
+
+        return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
     }
+
 
 }
 

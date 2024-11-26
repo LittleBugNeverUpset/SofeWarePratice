@@ -6,16 +6,17 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * @TableName distract
+ * @TableName parking_slot
  */
+@TableName(value ="parking_slot")
 @Data
-public class Distract implements Serializable {
+public class ParkingSlot implements Serializable {
     @TableId
-    private Integer distractId;
+    private Integer slotId;
 
-    private Integer cityId;
+    private Integer parkinglotId;
 
-    private String cityName;
+    private Object slotStatus;
 
     @Version
     private Integer version;

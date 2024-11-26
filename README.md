@@ -1,224 +1,45 @@
 # SofeWarePratice(Parkinglot Management System)
 
-### DataBase Used in This Troject
+## 整体设计概述
 
-``` SQL
-DROP TABLE IF EXISTS `parkinglot_managent`;
-CREATE DATABASE `parkinglot_managent`;
-USE `parkinglot_managent`;
+**系统功能按照角色划分为两大模块**：
 
-CREATE TABLE `user`(
-    `user_id` INT PRIMARY KEY NOT NULL ,
-    `user_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    `user_password` VARCHAR(30) NOT NULL ,
-    `user_sex` BOOLEAN DEFAULT NULL,
-    `user_email` VARCHAR(20) NOT NULL,
-    `user_create_time` DATETIME NOT NULL ,
-    `user_icon` VARCHAR(1000) DEFAULT NULL,
-    `version` INT DEFAULT  1 COMMENT '乐观锁',
-    `is_deleted` INT DEFAULT 0
-)ENGINE = INNODB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+1. 用户模块：面向普通用户，功能以查询、互动和个人信息管理为主。
+2. 管理员模块：分权限级别，负责系统管理、反馈处理及数据分析。
 
-CREATE TABLE `parkinglot`(
-    `parkinglot_id` INT NOT NULL ,
-    `parkinglot_district_id` INT NOT NULL,
-    `parkinglot_distract_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    `parkinglot_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    `parkinglot_location` POINT NOT NULL,
-    `parkinglot_number` INT NOT NULL,
-    `parkinglot_price` DOUBLE NOT NULL ,
-    `parkinglot_open_time` TIME NOT NULL,
-    `parkinglot_end_time` TIME NOT NULL ,
-    `is_free` INT DEFAULT 0,
-    `version` INT DEFAULT  1 COMMENT '乐观锁',
-    `is_deleted` INT DEFAULT 0,
-    PRIMARY KEY (`parkinglot_id`) USING BTREE
-)ENGINE = INNODB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+### 功能模块设计
 
-CREATE TABLE `order`(
-    `order_id` INT NOT NULL,
-    `order_status` INT NOT NULL,
-    `order_start_time` DATETIME NOT NULL ,
-    `order_end_time` DATETIME DEFAULT NULL,
-    `parkinglot_id` INT NOT NULL,
-    `car_id` INT NOT NULL,
-    `user_id` INT,
-    `order_value` DOUBLE DEFAULT NULL,
-    `version` INT DEFAULT  1 COMMENT '乐观锁',
-    `is_deleted` INT DEFAULT 0,
-    PRIMARY KEY (`order_id`) USING BTREE
-)ENGINE = INNODB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+#### 用户模块
+- [x] 用户注册与登录
 
-CREATE TABLE `master`(
-    `master_id` INT NOT NULL ,
-    `master_account` VARCHAR(30) NOT NULL ,
-    `master_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    `master_password` VARCHAR(30) NOT NULL ,
-    `master_permission_level` INT DEFAULT 3,
-    `version` INT DEFAULT  1 COMMENT '乐观锁',
-    `is_deleted` INT DEFAULT 0,
-    PRIMARY KEY (`master_id`) USING BTREE
-)ENGINE = INNODB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
-
-
-CREATE TABLE `car`(
-    `car_id` INT NOT NULL ,
-    `user_id` INT NOT NULL ,
-    `parking_status` BOOLEAN DEFAULT FALSE,
-    `version` INT DEFAULT  1 COMMENT '乐观锁',
-    `is_deleted` INT DEFAULT 0,
-    PRIMARY KEY (`car_id`) USING BTREE
-)ENGINE = INNODB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
-CREATE TABLE `distract`(
-    `distract_id`  INT NOT NULL ,
-    `city_id` INT NULL,
-    `city_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-    `is_deleted` INT DEFAULT 0,
-    PRIMARY KEY (`distract_id`) USING BTREE
-)ENGINE = INNODB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
-INSERT INTO `user` (user_id, user_name, user_password, user_sex, user_email, user_create_time) VALUES (1,'littlebug','123456',TRUE,'08225155@cumt.edu.cn','2017-07-25 19:41:14');
-
-alter table user change `user_password` `user_password` VARCHAR(100) NOT NULL ;
-
-alter table `user` change `user_id` `user_id` INT NOT NULL AUTO_INCREMENT   ;
-```
-
+    - [x] 注册：通过 UserController 提供用户注册接口，使用密码加密（如 BCrypt）。
+    - [x] 登录：JWT（JSON Web Token）实现无状态身份认证。
+- [ ] 停车场信息查询
+    - [ ] 提供停车场列表和详情查询接口，包括停车位状态、价格、营业时间。
+    - [ ] 附近设施查询：基于停车场坐标和设施坐标，通过地理计算（如 Haversine 公式）筛选附近设施。
+- [x] 个人信息管理
+    - [x] 提供用户信息更新接口（如修改邮箱、头像）。
+    - [x] 车辆绑定：支持新增、修改或解绑车辆。
+- [ ] 用户评论（反馈）
+  用户对停车场或设施发表评论。
+  支持多层评论（回复功能）。
+- [ ] 管理员模块
+  权限分级管理
+  最高级管理员（Super Admin）：能创建、删除、管理低权限管理员。
+  普通管理员：仅管理指定资源。
+- [ ] 用户评论管理
+  查看所有评论，回复用户反馈。
+  支持批量操作（如隐藏违规评论）。
+- [ ] 停车场和设施管理
+  增删改查停车场信息（包括停车位数量、价格、位置）。
+  管理便民设施（设施名称、状态、位置等）。
+- [ ] 数据报表与分析
+  生成停车场使用率统计报表。
+  生成收益和停车流量报表。
+  支持按时间维度（如每日、每月）导出数据。
+## DataBase Used in This Troject
+[本项目使用的数据库创建语句](./DevelopmentDOC/SoftWareTeamWork.sql)
 ### Interface Between Front and Backend 
-#### UserController
-##### Regist
-Request Method: **POST** 
 
-Request URL:"http://localhost:8080/user/regist"
-``` json
-{
-    "userName":"littlebug1", //用户名
-    "userPassword":"123456",     //明文密码
-    "userEmail":"3185153802@qq.com",
-    "userSex":"1",
-    "userCreateTime":"2024-11-01T12:00:00.000+08:00"
-}
-```
-Response
-```json
-{
-    "code": 200,
-    "message": "success",
-    "data": null
-}
-```
-##### Login
-Request Method: **POST**
-
-Request URL: "http://localhost:8080/user/login"
-```json
-{
-    "userName":"littlebug",     //用户名
-    "userPassword":"123456"     //明文密码
-}
-```
-Response
-```json
-{
-    "code": 200,
-    "message": "success",
-    "data": {
-        "token": "eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDc2MDewNDU20lEqLU4t8kxRsjKqBQBToAFqLwAAAA.jaIyV9pN0d2TjP_oM2pel0EIhE427mNwgcVVxisc9vlVnyuFtig8njPtFryf4G92Dl66o-7pPUe1fdRA22foDA"
-    }
-}
-```
-##### CheckUserName
-Request Method: **POST**
-Request URL: "http://localhost:8080/user/checkUserName"
-``` bash
-http://localhost:8080/user/checkUserName?username=littlebug1
-```
-
-Response
-``` json
-{
-    "code": 505,
-    "message": "userNameUsed",
-    "data": null
-}
-```
-
-##### getUserInfo
-
-Request Method: **GET**
-
-Request URL :"http://localhost:8080/user/getUserInfo"
-
-``` JSON
-HEADER: "token":"eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDc2MjQyNTU21VEqLU4t8kxRsjKqBQBwX6QeLwAAAA.Pv2F7Rt-eKTCeLkccWD79yCWi4O6IWWGoklEDJa0fLckHlhk-OgHxYDv_m_YqKuo6P-dtYHUsfG3s3KSigdpyw"
-```
-
-Response
-``` json
-{
-    "code": 200,
-    "message": "success",
-    "data": {
-        "loginUser": {
-            "userId": 2,
-            "userName": "littlebug1",
-            "userPassword": "e10adc3949ba59abbe56e057f20f883e",
-            "userSex": 1,
-            "userEmail": "3185153802@qq.com",
-            "userCreateTime": "2024-11-01T04:00:00.000+00:00",
-            "userIcon": null,
-            "version": 1,
-            "isDeleted": 0
-        }
-    }
-}
-```
-
-##### update
-
-Request Method: **PUT**
-Request URL: ""
-
-``` json
-
-{
-    "userName":"littlebug1", //用户名
-    "userPassword":"123456",     //明文密码
-    "userEmail":"493457392@qq.com",
-    "userSex":"1",
-    "userCreateTime":"2024-11-01T12:00:00.000+08:00"
-}
-HEADER: "token":"eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDc2MjQyNTU21VEqLU4t8kxRsjKqBQBwX6QeLwAAAA.Pv2F7Rt-eKTCeLkccWD79yCWi4O6IWWGoklEDJa0fLckHlhk-OgHxYDv_m_YqKuo6P-dtYHUsfG3s3KSigdpyw"
-
-```
-
-Response
-
-``` JSON
-{
-    "code": 200,
-    "message": "success",
-    "data": {
-        "loginUser": {
-            "userId": null,
-            "userName": "littlebug1",
-            "userPassword": "123456",
-            "userSex": 1,
-            "userEmail": "493457392@qq.com",
-            "userCreateTime": "2024-11-01T04:00:00.000+00:00",
-            "userIcon": null,
-            "version": null,
-            "isDeleted": null
-        }
-    }
-}
-```
-
-
-#### MasterController
-
-##### Login
-##### Regist
-##### getUserList
+[运行程序后于 http://localhost:8080/swagger-ui.html 查看接口文档](http://localhost:8080/swagger-ui.html)
+![](./DevelopmentDOC/images/Interface.png)

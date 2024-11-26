@@ -3,27 +3,35 @@ package com.chy.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName car
+ * @TableName comment
  */
+@TableName(value ="comment")
 @Data
-public class Car implements Serializable {
+public class Comment implements Serializable {
     @TableId
-    private Integer carId;
+    private Integer commentId;
+
+    private String commentContent;
+
+    private Integer parentCommentId;
 
     private Integer userId;
 
-    private Integer parkingStatus;
+    private Integer parkinglotId;
 
-    private String carPlateNumber;  // 车牌号
+    private Integer rating;
 
+    private Date commentTime;
     @Version
     private Integer version;
 
     @TableLogic
     private Integer isDeleted;
+
 
     private static final long serialVersionUID = 1L;
 }

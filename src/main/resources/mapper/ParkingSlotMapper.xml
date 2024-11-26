@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.ParkingSlotMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.ParkingSlot">
+            <id property="slotId" column="slot_id" jdbcType="INTEGER"/>
+            <result property="parkinglotId" column="parkinglot_id" jdbcType="INTEGER"/>
+            <result property="slotStatus" column="slot_status" jdbcType="OTHER"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        slot_id,parkinglot_id,slot_status,
+        version,is_deleted
+    </sql>
+</mapper>
