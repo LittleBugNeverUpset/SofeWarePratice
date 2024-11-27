@@ -10,7 +10,7 @@ import lombok.Data;
 /**
  * @TableName payment
  */
-@TableName(value ="payment")
+
 @Data
 public class Payment implements Serializable {
     @TableId

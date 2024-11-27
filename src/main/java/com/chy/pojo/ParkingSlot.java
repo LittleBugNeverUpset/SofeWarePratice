@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * @TableName parking_slot
  */
-@TableName(value ="parking_slot")
+
 @Data
 public class ParkingSlot implements Serializable {
     @TableId

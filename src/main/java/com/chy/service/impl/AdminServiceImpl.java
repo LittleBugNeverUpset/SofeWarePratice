@@ -3,13 +3,16 @@ package com.chy.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chy.mapper.CaptchaMapper;
 import com.chy.mapper.CarMapper;
 import com.chy.mapper.UserMapper;
 import com.chy.pojo.Admin;
+import com.chy.pojo.Captcha;
 import com.chy.pojo.Car;
 import com.chy.pojo.User;
 import com.chy.service.AdminService;
 import com.chy.mapper.AdminMapper;
+import com.chy.service.CaptchaService;
 import com.chy.utils.JwtHelper;
 import com.chy.utils.MD5Util;
 import com.chy.utils.Result;
@@ -38,6 +41,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
     private CarMapper carMapper;
     @Autowired
     private  JwtHelper jwtHelper;
+    @Autowired
+    private CaptchaMapper captchaMapper;
+
 
     @Override
     public Result login(Admin admin) {
@@ -103,19 +109,29 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
     }
 
     @Override
-    public Result regist(Admin admin) {
+    public Result regist(Admin admin, String captcha) {
         LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Admin::getAdminName,admin.getAdminName());
         Long count = adminMapper.selectCount(queryWrapper);
-
         if (count > 0){
             return Result.build(null,ResultCodeEnum.USERNAME_USED);
         }
+        LambdaQueryWrapper<Captcha> queryWrapper1 = new LambdaQueryWrapper<>();
+        queryWrapper1.eq(Captcha::getCode,captcha);
+        Captcha captcha1 = captchaMapper.selectOne(queryWrapper1);
+        if (captcha1 == null){
+            return Result.build(null,ResultCodeEnum.INVALID_PARAMS);
+        } else if (captcha1.getIsUsed() != 1) {
+            admin.setAdminPassword(MD5Util.encrypt(admin.getAdminPassword()));
+            admin.setAdminPermissionLevel(captcha1.getAdminLevel());
+            captcha1.setIsUsed(1);
+            captchaMapper.updateById(captcha1);
+            int rows = adminMapper.insert(admin);
+            System.out.println("rows = " + rows);
 
-        admin.setAdminPassword(MD5Util.encrypt(admin.getAdminPassword()));
-        int rows = adminMapper.insert(admin);
-        System.out.println("rows = " + rows);
-        return Result.ok(null);
+            return Result.ok(null);
+        }
+        return Result.build(null,ResultCodeEnum.INVALID_PARAMS);
     }
 
     @Override

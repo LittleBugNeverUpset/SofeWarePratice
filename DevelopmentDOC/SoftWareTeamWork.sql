@@ -132,7 +132,9 @@ CREATE TABLE `captcha` (
    `id` INT AUTO_INCREMENT PRIMARY KEY,
    `code` VARCHAR(100) NOT NULL,           -- 存储验证码
    `generated_by_admin_id` INT NOT NULL,   -- 生成验证码的管理员ID
+   `admin_level` INT NOT NULL,
    `expiration_time` DATETIME NOT NULL,    -- 验证码过期时间
    `is_used` BOOLEAN DEFAULT FALSE,        -- 标记验证码是否已使用
-   `create_time` DATETIME NOT NULL         -- 验证码创建时间
+   `create_time` DATETIME NOT NULL,         -- 验证码创建时间
 );
+

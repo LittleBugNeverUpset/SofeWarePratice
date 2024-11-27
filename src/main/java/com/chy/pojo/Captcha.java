@@ -1,9 +1,7 @@
 package com.chy.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
@@ -11,20 +9,29 @@ import lombok.Data;
 /**
  * @TableName captcha
  */
-@TableName(value ="captcha")
+
 @Data
 public class Captcha implements Serializable {
+    @TableId
     private Integer id;
 
     private String code;
 
     private Integer generatedByAdminId;
 
+    private Integer adminLevel;
+
     private Date expirationTime;
 
     private Integer isUsed;
 
     private Date createTime;
+
+    @Version
+    private Integer version;
+
+    @TableLogic
+    private Integer isDeleted;
 
     private static final long serialVersionUID = 1L;
 }

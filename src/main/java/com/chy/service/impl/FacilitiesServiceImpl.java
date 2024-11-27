@@ -32,6 +32,7 @@ public class FacilitiesServiceImpl extends ServiceImpl<FacilitiesMapper, Facilit
             return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
         }
         int adminId = jwtHelper.getUserId(token).intValue();
+        return null;
     }
 
     @Override
@@ -68,8 +69,8 @@ public class FacilitiesServiceImpl extends ServiceImpl<FacilitiesMapper, Facilit
             return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
         }
         int adminId = jwtHelper.getUserId(token).intValue();
-        List<Facilities> users = facilitiesMapper.selectList(null);
-        return Result.build(users,ResultCodeEnum.SUCCESS);
+        List<Facilities> facilities = facilitiesMapper.selectList(null);
+        return Result.build(facilities,ResultCodeEnum.SUCCESS);
     }
 }
 

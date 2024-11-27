@@ -1,4 +1,4 @@
-# SofeWarePratice(Parkinglot Management System)
+# SoftWarePratice(Parkinglot Management System)
 
 ## 整体设计概述
 
@@ -16,7 +16,7 @@
     - [x] 登录：JWT（JSON Web Token）实现无状态身份认证。
 - [ ] 停车场信息查询
     - [ ] 提供停车场列表和详情查询接口，包括停车位状态、价格、营业时间。
-    - [ ] 附近设施查询：基于停车场坐标和设施坐标，通过地理计算（如 Haversine 公式）筛选附近设施。
+    - [x] 附近设施查询。
 - [x] 个人信息管理
     - [x] 提供用户信息更新接口（如修改邮箱、头像）。
     - [x] 车辆绑定：支持新增、修改或解绑车辆。
@@ -24,22 +24,75 @@
   用户对停车场或设施发表评论。
   支持多层评论（回复功能）。
 - [ ] 管理员模块
-  权限分级管理
-  最高级管理员（Super Admin）：能创建、删除、管理低权限管理员。
+  - [x] 权限分级管理
+  - [ ] 最高级管理员（Super Admin）：能创建、删除、管理低权限管理员。
   普通管理员：仅管理指定资源。
 - [ ] 用户评论管理
-  查看所有评论，回复用户反馈。
-  支持批量操作（如隐藏违规评论）。
+  - [ ] 查看所有评论，回复用户反馈。
+  - [ ] 支持批量操作（如隐藏违规评论）。
 - [ ] 停车场和设施管理
-  增删改查停车场信息（包括停车位数量、价格、位置）。
-  管理便民设施（设施名称、状态、位置等）。
+  - [x] 增删改查停车场信息（包括停车位数量、价格、位置）。
+  - [x] 管理便民设施（设施名称、状态、位置等）。
 - [ ] 数据报表与分析
-  生成停车场使用率统计报表。
-  生成收益和停车流量报表。
-  支持按时间维度（如每日、每月）导出数据。
+  - [ ] 生成停车场使用率统计报表。
+  - [ ] 生成收益和停车流量报表。
+  - [ ] 支持按时间维度（如每日、每月）导出数据。
+- [ ] 日志功能
+  - [ ] 记录用户有对数据库产生影响的所有事件
+  - [ ] 记录管理员的所有操作
+  - [ ] 记录所有已完成的**完整订单**
 ## DataBase Used in This Troject
 [本项目使用的数据库创建语句](./DevelopmentDOC/SoftWareTeamWork.sql)
 ### Interface Between Front and Backend 
 
 [运行程序后于 http://localhost:8080/swagger-ui.html 查看接口文档](http://localhost:8080/swagger-ui.html)
-![](./DevelopmentDOC/images/Interface.png)
+![用户功能接口](./DevelopmentDOC/images/userInterface.png)
+![管理员功能接口](./DevelopmentDOC/images/adminInterface.png)
+
+## Deploy
+
+> 所需环境： `jdk_21+`,`maven_3.9+`
+
+创建springboot配置文件
+``` bash
+# touch ./src/main/resources/application.yaml
+```
+
+填写springboot配置文件
+
+``` yaml
+# server配置
+server:
+  port: 8080
+  servlet:
+    context-path: /Your/Root/Path
+
+# 连接池配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://[dbUrl]:[dbPort]/[dbName]
+      username: username
+      password: password
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+# mybatis-plus的配置
+mybatis-plus:
+  type-aliases-package: com.chy.pojo
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除
+      id-type: auto #主键策略自增长
+#jwt配置
+jwt:
+  token:
+    tokenExpiration: 120 #有效时间,单位分钟
+    tokenSignKey: nihao123  #当前程序签名秘钥 自定义
+```
+
+在项目根目录下执行如下操作
+
+```bash
+# mvn clean package
+```

@@ -2,6 +2,7 @@ package com.chy.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.pojo.ParkingSlot;
+import com.chy.pojo.Parkinglot;
 import com.chy.service.ParkingSlotService;
 import com.chy.mapper.ParkingSlotMapper;
 import com.chy.utils.Result;
@@ -17,9 +18,8 @@ import java.util.List;
 @Service
 public class ParkingSlotServiceImpl extends ServiceImpl<ParkingSlotMapper, ParkingSlot>
     implements ParkingSlotService{
-
     @Override
-    public Result addParkingSlots(String token, List<ParkingSlot> parkingSlots) {
+    public Result addParkingSlots(String token, Parkinglot parkinglot, List<ParkingSlot> parkingSlots) {
         return null;
     }
 }

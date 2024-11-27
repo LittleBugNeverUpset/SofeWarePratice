@@ -17,7 +17,7 @@ public interface AdminService extends IService<Admin> {
 
     Result checkAdminName(String adminname);
 
-    Result regist(Admin admin);
+    Result regist(Admin admin, String captcha);
 
     Result getAllUsers(String token);
 

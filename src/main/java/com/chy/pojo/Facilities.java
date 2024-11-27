@@ -8,7 +8,7 @@ import lombok.Data;
 /**
  * @TableName facilities
  */
-@TableName(value ="facilities")
+
 @Data
 public class Facilities implements Serializable {
     @TableId

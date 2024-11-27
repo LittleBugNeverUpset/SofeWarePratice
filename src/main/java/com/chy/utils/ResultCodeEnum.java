@@ -23,7 +23,9 @@ public enum ResultCodeEnum {
     //masterResult
     MASTERNAME_ERROR(520,"mastername Error"),
     MASTERNAME_USED(521,"master NameUsed"),
-    QUERYINDEX_ERROR(522,"query Index Error");
+    QUERYINDEX_ERROR(522,"query Index Error"),
+    LOW_PERMOSSIONS(523, "Insufficient permissions"),
+    LEVEL_OUT_OF_BOUNDS(524, "Level Out of Bounds" ),;
 
 
     private Integer code;
