@@ -96,3 +96,18 @@ jwt:
 ```bash
 # mvn clean package
 ```
+生成jar包 后传至你的linux服务器，进入jar包所在目录
+
+```bash
+# 查看之前运行的后端程序的运行状态，如果存在请使用第二条命令杀死该进程重新启动更新后的程序
+pgrep -f 'Test-project-backend-1.0-SNAPSHOT.jar'        #Test-project-backend-1.0-SNAPSHOT.jar 是我打包的程序的文件名
+
+kill -9 <PID>
+
+# 再次查看，确认进程已经结束
+ps aux | grep 'java' | grep 'Test-project-backend-1.0-SNAPSHOT.jar'
+
+# nohup 会让程序在后台运行，& 确保应用程序在后台执行，而 > app.log 会将输出重定向到 app.log 文件中。
+nohup java -jar Test-project-backend-1.0-SNAPSHOT.jar & > app.log & 
+
+```
