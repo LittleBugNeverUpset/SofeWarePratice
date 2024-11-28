@@ -1,13 +1,12 @@
 package com.chy.controller;
 
 import com.chy.dobj.OrderInitializationRequest;
-import com.chy.pojo.Car;
-import com.chy.pojo.CompletedOrder;
-import com.chy.pojo.User;
+import com.chy.pojo.*;
 import com.chy.service.*;
 import com.chy.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 @Tag(name = "用户服务接口", description = "")
@@ -27,6 +26,8 @@ public class UserController {
     private ParkingOrderService parkingOrderService;
     @Autowired
     private CompletedOrderService completedOrderService;
+    @Autowired
+    private PaymentService paymentService;
 
     /**
      * User自身操作模块
@@ -115,20 +116,35 @@ public class UserController {
     /**
      * 订单模块模块
      */
-    @Operation(summary = "生成初始订单", description = "（未实现）")
+    @Operation(summary = "生成初始订单(已实现)", description = "")
     @PostMapping("order")
     public Result addOrder(@RequestBody OrderInitializationRequest orderInitializationRequest, @RequestHeader String token){
         Result result = parkingOrderService.initOrder(orderInitializationRequest, token);
         return null;
     }
 //
-//    @Operation(summary = "业务过程中更新订单", description = "（未实现）")
-//    @PutMapping("order")
-//    public Result updateOrder(@RequestBody Order order, @RequestHeader String token){
-//        return null;
-//    }
-//    @Operation(summary = "流程结束生成完整订单", description = "（未实现）")
-//    @PutMapping("finishedOrder")
+    @Operation(summary = "业务过程中更新订单", description = "（未实现）")
+    @PutMapping("order")
+    public Result updateOrder(@RequestBody OrderInitializationRequest orderInitializationRequest, @RequestHeader String token){
+        return  null;
+    }
+
+    @Operation(summary = "业务过程中更新订单（未实现）", description = "取消订单")
+    @PutMapping("cancleOrder")
+    public Result cancleOrder(@RequestHeader String token){
+        return null;
+    }
+    @Operation(summary = "更新订单状态（未实现）", description = "更新订单状态")
+    @PostMapping("orderPayment")
+    public Result orderPayment( @RequestHeader String token){
+//        Result result = paymentService.payOrder(token);
+        return null;
+    }
+    @Operation(summary = "流程结束生成完整订单（未实现）", description = "订单进入完成待支付状态且完成支付后调用，修改订单信息为完成且生成完整订单")
+    @PutMapping("finishedOrder")
+    public Result finishedOrder(@RequestHeader String token){
+        return null;
+    }
 //    public Result updateFinishedOrder(@RequestBody Order order, @RequestHeader String token){
 //        return null;
 //    }
@@ -137,7 +153,21 @@ public class UserController {
 //    public Result getCompletedOrder(String token, CompletedOrder completedOrder){
 //        return null;
 //    }
-
+    /**
+     * 用户留言功能
+     */
+    @PostMapping("comment")
+    public Result addComment(@RequestBody Comment comment, @RequestHeader String token){
+        return  null;
+    }
+    @GetMapping("comment")
+    public Result getComment(@RequestHeader String token){
+        return null;
+    }
+    @DeleteMapping("comment")
+    public Result deleteComment(@RequestHeader String token, @Param("commentID") Integer commentID){
+        return null;
+    }
 
 
 }

@@ -11,8 +11,7 @@
 
 #### 用户模块
 - [x] 用户注册与登录
-
-    - [x] 注册：通过 UserController 提供用户注册接口，使用密码加密（如 BCrypt）。
+    - [x] 注册：通过 UserController 提供用户注册接口，使用密码加密（MD5）。
     - [x] 登录：JWT（JSON Web Token）实现无状态身份认证。
 - [x] 停车场信息查询
     - [x] 提供停车场列表和详情查询接口，包括停车位状态、价格、营业时间。
@@ -44,7 +43,9 @@
   - [ ] 记录管理员的所有操作
   - [ ] 记录所有已完成的**完整订单**
 ## DataBase Used in This Troject
-[本项目使用的数据库创建语句](./DevelopmentDOC/db.sql)
+
+为通过代码质量检测阶段sql语句我放在txt文件中，需要的话可直接复制至sql_console中运行
+[本项目使用的数据库创建语句](./DevelopmentDOC/db.txt)
 ### Interface Between Front and Backend 
 
 [运行程序后于 http://localhost:8080/swagger-ui.html 查看接口文档](http://localhost:8080/swagger-ui.html)
@@ -101,6 +102,8 @@ mvn clean package
 
 生成jar包 后传至你的linux服务器，进入jar包所在目录
 
+**需要开启指定端口的防火墙，示例配置文件中使用的是8080端口，采用云服务器还需要设置安全组开放对应端口**
+
 ```bash
 # 查看之前运行的后端程序的运行状态，如果存在请使用第二条命令杀死该进程重新启动更新后的程序
 pgrep -f 'Test-project-backend-1.0-SNAPSHOT.jar'        #Test-project-backend-1.0-SNAPSHOT.jar 是我打包的程序的文件名
@@ -116,5 +119,10 @@ nohup java -jar Test-project-backend-1.0-SNAPSHOT.jar & > app.log &
 # 若是在windows上试运行可以直接使用以下命令
 java -jar Test-project-backend-1.0-SNAPSHOT.jar & > app.log & 
 # 调试结束后 CTRL + C 结束进程
+```
+
+```bash
+#根据数据库导出建表语句
+mysqldump -u username -p --no-data --skip-triggers --routines database_name > database_name.sql
 
 ```

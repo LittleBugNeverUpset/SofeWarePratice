@@ -139,20 +139,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Result updateUserInfo(User user, String token) {
         // 获取 token 对应的用户 ID
         int userId = jwtHelper.getUserId(token).intValue();
-
         if (jwtHelper.isExpiration(token)) {
             // Token 过期，直接返回未登录
             return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
         }
-
         if (user == null || user.getUserId() == null) {
             return Result.build(null, ResultCodeEnum.INVALID_PARAMS);
         }
 
         // 校验 userId 是否一致，确保用户只能更新自己的信息
-        if (userId != user.getUserId()) {
-            return Result.build(null, ResultCodeEnum.FORBIDDEN); // 不允许更新其他用户信息
-        }
+//        if (userId != user.getUserId()) {
+//            return Result.build(null, ResultCodeEnum.FORBIDDEN); // 不允许更新其他用户信息
+//        }
+        user.setUserId(userId);
 
         // 这里可以检查用户是否更改了密码，如果没有更改，不更新密码
         if (user.getUserPassword() != null && !user.getUserPassword().isEmpty()) {
