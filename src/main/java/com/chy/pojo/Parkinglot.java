@@ -1,41 +1,42 @@
 package com.chy.pojo;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.awt.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 /**
  * @TableName parkinglot
  */
+@TableName(value ="parkinglot")
 @Data
 public class Parkinglot implements Serializable {
-    @TableId
     private Integer parkinglotId;
 
-    private Integer parkinglotDistrictId;
-
-    private String parkinglotDistractName;
+    private Integer districtId;
 
     private String parkinglotName;
 
-    private Integer parkinglotLocation;
+//    private String parkinglotLocation;
 
-    private Integer parkinglotNumber;
+    private Integer parkinglotCapacity;
 
-    private Double parkinglotPrice;
+    private BigDecimal parkinglotPrice;
 
     private Date parkinglotOpenTime;
 
-    private Date parkinglotEndTime;
+    private Date parkinglotCloseTime;
 
     private Integer isFree;
 
-    @Version
     private Integer version;
 
-    @TableLogic
     private Integer isDeleted;
 
     private static final long serialVersionUID = 1L;

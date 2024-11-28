@@ -157,6 +157,24 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         List<Car> cars = carMapper.selectList(null);
         return Result.build(cars,ResultCodeEnum.SUCCESS);
     }
+
+    @Override
+    public Result generateDM(Admin admin) {
+        LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Admin::getAdminName,admin.getAdminName());
+        Long count = adminMapper.selectCount(queryWrapper);
+        if (count > 0){
+            return Result.build(null,ResultCodeEnum.USERNAME_USED);
+        }
+        else {
+            admin.setAdminPassword(MD5Util.encrypt(admin.getAdminPassword()));
+            admin.setAdminPermissionLevel(1);
+            int rows = adminMapper.insert(admin);
+            System.out.println("rows = " + rows);
+            return Result.ok(null);
+        }
+    }
+
 }
 
 

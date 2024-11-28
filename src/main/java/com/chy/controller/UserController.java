@@ -1,12 +1,10 @@
 package com.chy.controller;
 
-import com.chy.mapper.FacilitiesMapper;
+import com.chy.dobj.OrderInitializationRequest;
 import com.chy.pojo.Car;
-import com.chy.pojo.Order;
+import com.chy.pojo.CompletedOrder;
 import com.chy.pojo.User;
-import com.chy.service.CarService;
-import com.chy.service.FacilitiesService;
-import com.chy.service.UserService;
+import com.chy.service.*;
 import com.chy.utils.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,11 +23,16 @@ public class UserController {
     private CarService carService;
     @Autowired
     private FacilitiesService facilitiesService;
+    @Autowired
+    private ParkingOrderService parkingOrderService;
+    @Autowired
+    private CompletedOrderService completedOrderService;
 
     /**
      * User自身操作模块
      *
      */
+
     @Operation(summary = "检查用户名称是否已经使用(已实现)", description = "检查用户名称是否已经使用，根据返回结果选择是否在前端拦截请求（已实现）")
     @PostMapping("checkUserName")
     public Result checkUserName(String username){
@@ -114,20 +117,26 @@ public class UserController {
      */
     @Operation(summary = "生成初始订单", description = "（未实现）")
     @PostMapping("order")
-    public Result addOrder(@RequestBody Order order, @RequestHeader String token){
+    public Result addOrder(@RequestBody OrderInitializationRequest orderInitializationRequest, @RequestHeader String token){
+        Result result = parkingOrderService.initOrder(orderInitializationRequest, token);
         return null;
     }
-
-    @Operation(summary = "业务过程中更新订单", description = "（未实现）")
-    @PutMapping("order")
-    public Result updateOrder(@RequestBody Order order, @RequestHeader String token){
-        return null;
-    }
-    @Operation(summary = "流程结束生成完整订单", description = "（未实现）")
-    @PutMapping("finishedOrder")
-    public Result updateFinishedOrder(@RequestBody Order order, @RequestHeader String token){
-        return null;
-    }
+//
+//    @Operation(summary = "业务过程中更新订单", description = "（未实现）")
+//    @PutMapping("order")
+//    public Result updateOrder(@RequestBody Order order, @RequestHeader String token){
+//        return null;
+//    }
+//    @Operation(summary = "流程结束生成完整订单", description = "（未实现）")
+//    @PutMapping("finishedOrder")
+//    public Result updateFinishedOrder(@RequestBody Order order, @RequestHeader String token){
+//        return null;
+//    }
+//
+//    @GetMapping("completedOrder")
+//    public Result getCompletedOrder(String token, CompletedOrder completedOrder){
+//        return null;
+//    }
 
 
 

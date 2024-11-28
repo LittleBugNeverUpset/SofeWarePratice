@@ -5,21 +5,30 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName parking_slot
+ * @TableName parking_order
  */
-@TableName(value ="parking_slot")
+@TableName(value ="parking_order")
 @Data
-public class ParkingSlot implements Serializable {
-    private Integer slotId;
+public class ParkingOrder implements Serializable {
+    private Integer orderId;
 
-    private Integer parkingslotId;
+    private Integer orderStatus;
+
+    private Date orderCreateTime;
+
+    private Date orderUpdateTime;
 
     private Integer parkinglotId;
 
-    private Integer slotStatus;
+    private Integer slotId;
+
+    private Integer userId;
+
+    private Integer carId;
 
     private Integer version;
 

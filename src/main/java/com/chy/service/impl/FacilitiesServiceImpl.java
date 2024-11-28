@@ -58,7 +58,7 @@ public class FacilitiesServiceImpl extends ServiceImpl<FacilitiesMapper, Facilit
             }
         }
         if (failInsterList.size() > 0) {
-            return Result.build(failInsterList, ResultCodeEnum.INSERT_FAILD);
+            return Result.build(failInsterList, ResultCodeEnum.INSERT_FAILED);
         }
         return Result.build(null,ResultCodeEnum.SUCCESS);
     }

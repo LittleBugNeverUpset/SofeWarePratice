@@ -22,4 +22,6 @@ public interface AdminService extends IService<Admin> {
     Result getAllUsers(String token);
 
     Result getAllcars(String token);
+
+    Result generateDM(Admin admin);
 }

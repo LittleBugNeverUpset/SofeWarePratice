@@ -6,6 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.chy.pojo.ParkingSlot">
             <id property="slotId" column="slot_id" jdbcType="INTEGER"/>
+            <result property="parkingslotId" column="parkingslot_id" jdbcType="INTEGER"/>
             <result property="parkinglotId" column="parkinglot_id" jdbcType="INTEGER"/>
             <result property="slotStatus" column="slot_status" jdbcType="OTHER"/>
             <result property="version" column="version" jdbcType="INTEGER"/>
@@ -13,7 +14,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        slot_id,parkinglot_id,slot_status,
-        version,is_deleted
+        slot_id,parkingslot_id,parkinglot_id,
+        slot_status,version,is_deleted
     </sql>
 </mapper>

@@ -19,13 +19,16 @@ public enum ResultCodeEnum {
     USER_NOT_FOUND(509,"user Not Found"),
     CREATE_FAILED(510,"create Failed"),
     CAR_NOT_EXIST(511,"car not Exist"),
-    INSERT_FAILD(512,"insert Failed" ),
+    INSERT_FAILED(512,"insert Failed" ),
     //masterResult
     MASTERNAME_ERROR(520,"mastername Error"),
     MASTERNAME_USED(521,"master NameUsed"),
     QUERYINDEX_ERROR(522,"query Index Error"),
     LOW_PERMOSSIONS(523, "Insufficient permissions"),
-    LEVEL_OUT_OF_BOUNDS(524, "Level Out of Bounds" ),;
+    LEVEL_OUT_OF_BOUNDS(524, "Level Out of Bounds" ),
+    VEHICLE_NOT_REGISTERED(525, "Vehicle Not Registered. Please Register Vehicle Before Generate Orders"),
+    VEHICLE_ALREADY_PARKING(526,"Vehicle Already Parking" ),
+    PARKINGLOT_NOT_FOUND(527,"parkinglot Not Found" );
 
 
     private Integer code;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.CompletedOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.CompletedOrder">
+            <id property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="carId" column="car_id" jdbcType="INTEGER"/>
+            <result property="parkinglotId" column="parkinglot_id" jdbcType="INTEGER"/>
+            <result property="slotId" column="slot_id" jdbcType="INTEGER"/>
+            <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+            <result property="orderValue" column="order_value" jdbcType="DECIMAL"/>
+            <result property="paymentMethod" column="payment_method" jdbcType="INTEGER"/>
+            <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
+            <result property="orderCreateTime" column="order_create_time" jdbcType="TIMESTAMP"/>
+            <result property="orderUpdateTime" column="order_update_time" jdbcType="TIMESTAMP"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="durationMinutes" column="duration_minutes" jdbcType="INTEGER"/>
+            <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+            <result property="totalAmount" column="total_amount" jdbcType="DECIMAL"/>
+            <result property="isPaid" column="is_paid" jdbcType="TINYINT"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        order_id,user_id,car_id,
+        parkinglot_id,slot_id,order_status,
+        order_value,payment_method,payment_time,
+        order_create_time,order_update_time,start_time,
+        end_time,duration_minutes,remarks,
+        total_amount,is_paid,version,
+        is_deleted
+    </sql>
+</mapper>

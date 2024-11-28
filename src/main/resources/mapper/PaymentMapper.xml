@@ -7,13 +7,16 @@
     <resultMap id="BaseResultMap" type="com.chy.pojo.Payment">
             <id property="paymentId" column="payment_id" jdbcType="INTEGER"/>
             <result property="orderId" column="order_id" jdbcType="INTEGER"/>
-            <result property="paymentAmount" column="payment_amount" jdbcType="DECIMAL"/>
-            <result property="paymentMethod" column="payment_method" jdbcType="OTHER"/>
+            <result property="totalAmount" column="total_amount" jdbcType="DECIMAL"/>
+            <result property="paymentMethod" column="payment_method" jdbcType="INTEGER"/>
             <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        payment_id,order_id,payment_amount,
-        payment_method,payment_time
+        payment_id,order_id,total_amount,
+        payment_method,payment_time,version,
+        is_deleted
     </sql>
 </mapper>

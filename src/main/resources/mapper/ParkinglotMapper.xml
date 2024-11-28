@@ -6,23 +6,22 @@
 
     <resultMap id="BaseResultMap" type="com.chy.pojo.Parkinglot">
             <id property="parkinglotId" column="parkinglot_id" jdbcType="INTEGER"/>
-            <result property="parkinglotDistrictId" column="parkinglot_district_id" jdbcType="INTEGER"/>
-            <result property="parkinglotDistractName" column="parkinglot_distract_name" jdbcType="VARCHAR"/>
+            <result property="districtId" column="district_id" jdbcType="INTEGER"/>
             <result property="parkinglotName" column="parkinglot_name" jdbcType="VARCHAR"/>
             <result property="parkinglotLocation" column="parkinglot_location" jdbcType="INTEGER"/>
-            <result property="parkinglotNumber" column="parkinglot_number" jdbcType="INTEGER"/>
-            <result property="parkinglotPrice" column="parkinglot_price" jdbcType="DOUBLE"/>
+            <result property="parkinglotCapacity" column="parkinglot_capacity" jdbcType="INTEGER"/>
+            <result property="parkinglotPrice" column="parkinglot_price" jdbcType="DECIMAL"/>
             <result property="parkinglotOpenTime" column="parkinglot_open_time" jdbcType="TIME"/>
-            <result property="parkinglotEndTime" column="parkinglot_end_time" jdbcType="TIME"/>
-            <result property="isFree" column="is_free" jdbcType="INTEGER"/>
+            <result property="parkinglotCloseTime" column="parkinglot_close_time" jdbcType="TIME"/>
+            <result property="isFree" column="is_free" jdbcType="TINYINT"/>
             <result property="version" column="version" jdbcType="INTEGER"/>
-            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        parkinglot_id,parkinglot_district_id,parkinglot_distract_name,
-        parkinglot_name,parkinglot_location,parkinglot_number,
-        parkinglot_price,parkinglot_open_time,parkinglot_end_time,
-        is_free,version,is_deleted
+        parkinglot_id,district_id,parkinglot_name,
+        parkinglot_location,parkinglot_capacity,parkinglot_price,
+        parkinglot_open_time,parkinglot_close_time,is_free,
+        version,is_deleted
     </sql>
 </mapper>

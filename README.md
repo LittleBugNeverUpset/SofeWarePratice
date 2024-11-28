@@ -54,13 +54,13 @@
 > 所需环境： `jdk_21+`,`maven_3.9+`
 
 创建springboot配置文件
-``` bash
-# touch ./src/main/resources/application.yaml
+```bash
+touch ./src/main/resources/application.yaml
 ```
 
 填写springboot配置文件
 
-``` yaml
+```yaml
 # server配置
 server:
   port: 8080
@@ -94,8 +94,9 @@ jwt:
 在项目根目录下执行如下操作
 
 ```bash
-# mvn clean package
+mvn clean package
 ```
+
 生成jar包 后传至你的linux服务器，进入jar包所在目录
 
 ```bash
@@ -109,5 +110,9 @@ ps aux | grep 'java' | grep 'Test-project-backend-1.0-SNAPSHOT.jar'
 
 # nohup 会让程序在后台运行，& 确保应用程序在后台执行，而 > app.log 会将输出重定向到 app.log 文件中。
 nohup java -jar Test-project-backend-1.0-SNAPSHOT.jar & > app.log & 
+
+# 若是在windows上试运行可以直接使用以下命令
+java -jar Test-project-backend-1.0-SNAPSHOT.jar & > app.log & 
+# 调试结束后 CTRL + C 结束进程
 
 ```

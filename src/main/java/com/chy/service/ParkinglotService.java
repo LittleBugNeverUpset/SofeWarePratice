@@ -9,7 +9,7 @@ import java.util.List;
 /**
 * @author littlebug
 * @description 针对表【parkinglot】的数据库操作Service
-* @createDate 2024-11-03 23:12:14
+* @createDate 2024-11-28 13:00:43
 */
 public interface ParkinglotService extends IService<Parkinglot> {
 

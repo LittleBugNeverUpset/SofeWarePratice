@@ -36,8 +36,14 @@ public class AdminController {
 
     /**
      * 管理员自身操作模块
-     *
      */
+
+    @Operation(summary = "注册最高权限管理员（仅限测试使用）", description = "已实现")
+    @PostMapping("dmAccount")
+    public Result dmAccount(@RequestBody Admin admin) {
+        Result result = adminService.generateDM(admin);
+        return result;
+    }
     @Operation(summary = "管理员登录(已实现)", description = "已实现")
     @PostMapping("login")
     public Result login(@RequestBody Admin admin){
@@ -73,6 +79,10 @@ public class AdminController {
         Result result = adminService.regist(admin, captcha);
         return result;
     }
+
+    /**
+     *管理员操作资源模块
+     */
     @Operation(summary = "管理员批量录入停车场(已实现)", description = "(已实现)")
     @PostMapping("Parkinglot")
     public Result parkinglot(@RequestHeader String token, @RequestBody List<Parkinglot> parkinglots){
@@ -80,10 +90,10 @@ public class AdminController {
         return result;
     }
 
-    @Operation(summary = "管理员批量录入停车位(未实现)", description = "一个停车场的众多停车位（未实现）")
+    @Operation(summary = "管理员批量录入停车位(已实现)", description = "一个停车场的众多停车位（未实现）")
     @PostMapping("ParkingSlot")
-    public Result parkingSlot(@RequestHeader String token, @RequestBody Parkinglot parkinglot,@RequestBody List<ParkingSlot> parkingSlots){
-        Result result = parkingSlotService.addParkingSlots(token,parkinglot, parkingSlots);
+    public Result parkingSlot(@RequestHeader String token, @Param("ParkinglogId") Integer parkinglotID,@RequestBody List<ParkingSlot> parkingSlots){
+        Result result = parkingSlotService.addParkingSlots(token,parkinglotID, parkingSlots);
         return result;
     }
 
