@@ -14,25 +14,27 @@
 
     - [x] 注册：通过 UserController 提供用户注册接口，使用密码加密（如 BCrypt）。
     - [x] 登录：JWT（JSON Web Token）实现无状态身份认证。
-- [ ] 停车场信息查询
-    - [ ] 提供停车场列表和详情查询接口，包括停车位状态、价格、营业时间。
+- [x] 停车场信息查询
+    - [x] 提供停车场列表和详情查询接口，包括停车位状态、价格、营业时间。
     - [x] 附近设施查询。
 - [x] 个人信息管理
     - [x] 提供用户信息更新接口（如修改邮箱、头像）。
     - [x] 车辆绑定：支持新增、修改或解绑车辆。
 - [ ] 用户评论（反馈）
-  用户对停车场或设施发表评论。
-  支持多层评论（回复功能）。
+  - [ ] 用户对停车场或设施发表评论。
+  - [ ] 支持多层评论（回复功能）。
 - [ ] 管理员模块
   - [x] 权限分级管理
-  - [ ] 最高级管理员（Super Admin）：能创建、删除、管理低权限管理员。
-  普通管理员：仅管理指定资源。
+  - [x] 最高级管理员（Super Admin）：能创建、删除、管理低权限管理员。
+  - [ ] 普通管理员：仅管理指定资源。
 - [ ] 用户评论管理
   - [ ] 查看所有评论，回复用户反馈。
   - [ ] 支持批量操作（如隐藏违规评论）。
-- [ ] 停车场和设施管理
+- [x] 停车场和设施管理
   - [x] 增删改查停车场信息（包括停车位数量、价格、位置）。
   - [x] 管理便民设施（设施名称、状态、位置等）。
+- [ ] 用户使用停车场的订单系统
+  - [x] 生成初始订单填入必要信息
 - [ ] 数据报表与分析
   - [ ] 生成停车场使用率统计报表。
   - [ ] 生成收益和停车流量报表。
@@ -42,12 +44,12 @@
   - [ ] 记录管理员的所有操作
   - [ ] 记录所有已完成的**完整订单**
 ## DataBase Used in This Troject
-[本项目使用的数据库创建语句](./DevelopmentDOC/SoftWareTeamWork.sql)
+[本项目使用的数据库创建语句](./DevelopmentDOC/db.sql)
 ### Interface Between Front and Backend 
 
 [运行程序后于 http://localhost:8080/swagger-ui.html 查看接口文档](http://localhost:8080/swagger-ui.html)
-![用户功能接口](./DevelopmentDOC/images/userInterface.png)
-![管理员功能接口](./DevelopmentDOC/images/adminInterface.png)
+![用户功能接口示例](./DevelopmentDOC/images/userInterface.png)
+![管理员功能接口示例](./DevelopmentDOC/images/adminInterface.png)
 
 ## Deploy
 
