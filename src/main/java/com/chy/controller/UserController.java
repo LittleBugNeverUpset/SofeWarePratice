@@ -116,43 +116,30 @@ public class UserController {
     /**
      * 订单模块模块
      */
-    @Operation(summary = "生成初始订单(已实现)", description = "")
+    @Operation(summary = "生成初始订单(已实现)", description = "首先检查用户是否有未完成的订单，如果有则不能产生新的订单")
     @PostMapping("order")
     public Result addOrder(@RequestBody OrderInitializationRequest orderInitializationRequest, @RequestHeader String token){
         Result result = parkingOrderService.initOrder(orderInitializationRequest, token);
         return null;
     }
-//
-    @Operation(summary = "业务过程中更新订单", description = "（未实现）")
+    @Operation(summary = "业务过程中更新订单——订单由进行中转为已经结束但未付款（已实现）", description = "在用户存在正在进行中的订单的情况下才能对进行中的订单进行更新状态")
     @PutMapping("order")
-    public Result updateOrder(@RequestBody OrderInitializationRequest orderInitializationRequest, @RequestHeader String token){
-        return  null;
+    public Result updateOrder( @RequestHeader String token){
+        Result result = parkingOrderService.updateOrder(token);
+        return result;
     }
-
-    @Operation(summary = "业务过程中更新订单（未实现）", description = "取消订单")
+    @Operation(summary = "业务过程中取消订单（未实现）", description = "取消订单")
     @PutMapping("cancleOrder")
     public Result cancleOrder(@RequestHeader String token){
-        return null;
+        Result result = parkingOrderService.cancleOrder(token);
+        return result;
     }
-    @Operation(summary = "更新订单状态（未实现）", description = "更新订单状态")
+    @Operation(summary = "订单支付，该功能在支付成功后调用，将订单状态改为已完成，且生成completedOrder保存进数据库", description = "更新订单状态")
     @PostMapping("orderPayment")
     public Result orderPayment( @RequestHeader String token){
-//        Result result = paymentService.payOrder(token);
+        Result result = paymentService.payOrder(token);
         return null;
     }
-    @Operation(summary = "流程结束生成完整订单（未实现）", description = "订单进入完成待支付状态且完成支付后调用，修改订单信息为完成且生成完整订单")
-    @PutMapping("finishedOrder")
-    public Result finishedOrder(@RequestHeader String token){
-        return null;
-    }
-//    public Result updateFinishedOrder(@RequestBody Order order, @RequestHeader String token){
-//        return null;
-//    }
-//
-//    @GetMapping("completedOrder")
-//    public Result getCompletedOrder(String token, CompletedOrder completedOrder){
-//        return null;
-//    }
     /**
      * 用户留言功能
      */

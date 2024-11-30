@@ -2,6 +2,7 @@ package com.chy.service;
 
 import com.chy.pojo.Payment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chy.utils.Result;
 
 /**
 * @author littlebug
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface PaymentService extends IService<Payment> {
 
+    Result payOrder(String token);
 }

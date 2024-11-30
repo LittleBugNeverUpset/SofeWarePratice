@@ -13,4 +13,8 @@ import com.chy.utils.Result;
 public interface ParkingOrderService extends IService<ParkingOrder> {
 
     Result initOrder(OrderInitializationRequest orderInitializationRequest, String token);
+
+    Result updateOrder(String token);
+
+    Result cancleOrder(String token);
 }

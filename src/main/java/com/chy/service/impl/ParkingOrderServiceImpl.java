@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * @author littlebug
@@ -46,14 +48,21 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
         LambdaQueryWrapper<Car> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Car::getCarPlateNumber,orderInitializationRequest.getCarPlateNumber());
         Car car = carMapper.selectOne(queryWrapper);
+        LambdaQueryWrapper<ParkingOrder> queryWrapper1 = new LambdaQueryWrapper<>();
+        queryWrapper1.eq(ParkingOrder::getCarId,car.getCarId());
+        List<Integer> errorStatus = new ArrayList<>();
+        errorStatus.add(2);
+        errorStatus.add(3);
+        queryWrapper1.eq(ParkingOrder::getOrderStatus,errorStatus);
         if(car==null){
 //            车辆不在系统中登记无法生成订单
             return Result.build(null, ResultCodeEnum.VEHICLE_NOT_REGISTERED);
         } else if (car.getParkingStatus() == 1) {
 //            显示车辆已经在停车场中停泊
             return Result.build(null, ResultCodeEnum.VEHICLE_ALREADY_PARKING);
-        }
-        else {
+        } else if (parkingOrderMapper.selectCount(queryWrapper1) >=1) {
+            return Result.build(null, ResultCodeEnum.VEHICLE_ALREADY_PARKING);
+        } else {
             ParkingOrder parkingOrder = new ParkingOrder();
             parkingOrder.setUserId(userId);
             parkingOrder.setCarId(car.getCarId());
@@ -65,7 +74,50 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
             parkingOrderMapper.insert(parkingOrder);
             return  Result.build(parkingOrder, ResultCodeEnum.SUCCESS);
         }
+    }
+    @Override
+    public Result updateOrder(String token) {
+        // 获取 token 对应的用户 ID
+        int userId = jwtHelper.getUserId(token).intValue();
+        if (jwtHelper.isExpiration(token)) {
+            // Token 过期，直接返回未登录
+            return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
+        }
+        LambdaQueryWrapper<ParkingOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ParkingOrder::getUserId,userId);
+        queryWrapper.eq(ParkingOrder::getOrderStatus,1);
+        if(parkingOrderMapper.selectCount(queryWrapper) == 0 ){
+            return Result.build(null, ResultCodeEnum.ORDER_ERROR);
+        }
+        else {
+            ParkingOrder parkingOrder = parkingOrderMapper.selectOne(queryWrapper);
+            parkingOrder.setOrderUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
+            parkingOrder.setOrderStatus(2);
+            parkingOrderMapper.updateById(parkingOrder);
+            return Result.build(parkingOrder, ResultCodeEnum.SUCCESS);
+        }
+    }
 
+    @Override
+    public Result cancleOrder(String token) {
+        // 获取 token 对应的用户 ID
+        int userId = jwtHelper.getUserId(token).intValue();
+        if (jwtHelper.isExpiration(token)) {
+            // Token 过期，直接返回未登录
+            return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
+        }
+        LambdaQueryWrapper<ParkingOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ParkingOrder::getUserId,userId);
+        queryWrapper.eq(ParkingOrder::getOrderStatus,1);
+        if(parkingOrderMapper.selectCount(queryWrapper) == 0 ){
+            return Result.build(null, ResultCodeEnum.ORDER_ERROR);
+        }else {
+            ParkingOrder parkingOrder = parkingOrderMapper.selectOne(queryWrapper);
+            parkingOrder.setOrderUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
+            parkingOrder.setOrderStatus(4);
+            parkingOrderMapper.updateById(parkingOrder);
+            return Result.build(parkingOrder, ResultCodeEnum.SUCCESS);
+        }
     }
 }
 

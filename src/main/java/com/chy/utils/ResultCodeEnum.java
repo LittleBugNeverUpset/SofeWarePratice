@@ -28,7 +28,8 @@ public enum ResultCodeEnum {
     LEVEL_OUT_OF_BOUNDS(524, "Level Out of Bounds" ),
     VEHICLE_NOT_REGISTERED(525, "Vehicle Not Registered. Please Register Vehicle Before Generate Orders"),
     VEHICLE_ALREADY_PARKING(526,"Vehicle Already Parking" ),
-    PARKINGLOT_NOT_FOUND(527,"parkinglot Not Found" );
+    PARKINGLOT_NOT_FOUND(527,"parkinglot Not Found" ),
+    ORDER_ERROR(528,"The order does not exist or has not been completed " );
 
 
     private Integer code;
