@@ -8,6 +8,7 @@ import com.chy.pojo.Car;
 import com.chy.pojo.ParkingOrder;
 import com.chy.service.ParkingOrderService;
 import com.chy.mapper.ParkingOrderMapper;
+import com.chy.service.UserLogsService;
 import com.chy.utils.JwtHelper;
 import com.chy.utils.Result;
 import com.chy.utils.ResultCodeEnum;
@@ -34,6 +35,8 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
     private JwtHelper jwtHelper;
     @Autowired
     private CarMapper carMapper;
+    @Autowired
+    private UserLogsService userLogsService;
 
 
     @Override
@@ -71,6 +74,7 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
             parkingOrder.setSlotId(orderInitializationRequest.getSlotId());
             parkingOrder.setOrderStatus(1);
             parkingOrder.setOrderCreateTime(Timestamp.valueOf(LocalDateTime.now()));
+            userLogsService.generateUserLogs(userId,"Generator Init Order", parkingOrder.toString());
             parkingOrderMapper.insert(parkingOrder);
             return  Result.build(parkingOrder, ResultCodeEnum.SUCCESS);
         }
@@ -93,6 +97,7 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
             ParkingOrder parkingOrder = parkingOrderMapper.selectOne(queryWrapper);
             parkingOrder.setOrderUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
             parkingOrder.setOrderStatus(2);
+            userLogsService.generateUserLogs(userId,"Generator Update Order", parkingOrder.toString());
             parkingOrderMapper.updateById(parkingOrder);
             return Result.build(parkingOrder, ResultCodeEnum.SUCCESS);
         }
@@ -115,6 +120,7 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
             ParkingOrder parkingOrder = parkingOrderMapper.selectOne(queryWrapper);
             parkingOrder.setOrderUpdateTime(Timestamp.valueOf(LocalDateTime.now()));
             parkingOrder.setOrderStatus(4);
+            userLogsService.generateUserLogs(userId,"Generator Cancle Order", parkingOrder.toString());
             parkingOrderMapper.updateById(parkingOrder);
             return Result.build(parkingOrder, ResultCodeEnum.SUCCESS);
         }

@@ -120,7 +120,7 @@ public class UserController {
     @PostMapping("order")
     public Result addOrder(@RequestBody OrderInitializationRequest orderInitializationRequest, @RequestHeader String token){
         Result result = parkingOrderService.initOrder(orderInitializationRequest, token);
-        return null;
+        return result;
     }
     @Operation(summary = "业务过程中更新订单——订单由进行中转为已经结束但未付款（已实现）", description = "在用户存在正在进行中的订单的情况下才能对进行中的订单进行更新状态")
     @PutMapping("order")
@@ -138,7 +138,7 @@ public class UserController {
     @PostMapping("orderPayment")
     public Result orderPayment( @RequestHeader String token){
         Result result = paymentService.payOrder(token);
-        return null;
+        return result;
     }
     /**
      * 用户留言功能

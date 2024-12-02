@@ -6,6 +6,7 @@ import com.chy.mapper.*;
 import com.chy.pojo.*;
 import com.chy.service.CompletedOrderService;
 import com.chy.service.PaymentService;
+import com.chy.service.UserLogsService;
 import com.chy.utils.JwtHelper;
 import com.chy.utils.Result;
 import com.chy.utils.ResultCodeEnum;
@@ -36,6 +37,8 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment>
     private CarMapper carMapper;
     @Autowired
     private ParkinglotMapper parkinglotMapper;
+    @Autowired
+    private UserLogsService userLogsService;
 
     @Override
     public Result payOrder(String token) {
@@ -85,9 +88,10 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment>
             completedOrder.setOrderId(parkingOrder.getOrderId());
             completedOrder.setOrderCreateTime(now);
             completedOrder.setOrderUpdateTime(now);
+            userLogsService.generateUserLogs(userId,"Paid and Complete Order",  completedOrder.toString());
             completedOrderMapper.insert(completedOrder);
             parkingOrderMapper.updateById(parkingOrder);
-            return Result.build(parkingOrder  +"Order has been paid", ResultCodeEnum.SUCCESS);
+            return Result.build(completedOrder  +"Order has been paid", ResultCodeEnum.SUCCESS);
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.chy.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -14,9 +11,10 @@ import lombok.Data;
 /**
  * @TableName parkinglot
  */
-@TableName(value ="parkinglot")
+
 @Data
 public class Parkinglot implements Serializable {
+    @TableId
     private Integer parkinglotId;
 
     private Integer districtId;
@@ -35,8 +33,10 @@ public class Parkinglot implements Serializable {
 
     private Integer isFree;
 
+    @Version
     private Integer version;
 
+    @TableLogic
     private Integer isDeleted;
 
     private static final long serialVersionUID = 1L;

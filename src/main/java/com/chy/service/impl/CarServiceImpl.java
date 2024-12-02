@@ -7,6 +7,7 @@ import com.chy.pojo.Car;
 import com.chy.pojo.User;
 import com.chy.service.CarService;
 import com.chy.mapper.CarMapper;
+import com.chy.service.UserLogsService;
 import com.chy.service.UserService;
 import com.chy.utils.JwtHelper;
 import com.chy.utils.Result;
@@ -26,6 +27,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car>
     @Autowired
     private JwtHelper jwtHelper;
     @Autowired private UserMapper userMapper;
+    @Autowired private UserLogsService userLogsService;
 
     @Override
     public Result bindCarToUser(Car car, String token) {
@@ -48,6 +50,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car>
         // 将车辆信息插入到数据库
         int rowsAffected = carMapper.insert(car);
         if (rowsAffected > 0) {
+            userLogsService.generateUserLogs(userId,"Band Car To User","Band " +car.toString() + " To User" );
             return Result.ok("车辆绑定成功");  // 车辆成功绑定，返回成功信息
         } else {
             return Result.build(null, ResultCodeEnum.CREATE_FAILED);  // 绑定失败，返回创建失败信息
@@ -68,6 +71,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car>
         if (car != null) {
             car.setIsDeleted(1);
             int rowsAffected = carMapper.updateById(car);
+            userLogsService.generateUserLogs(userId,"Delete Car From User","Delete Car"+ carPlateNumber+" From User" );
             return Result.build(rowsAffected, ResultCodeEnum.SUCCESS);
         }
         return Result.build(null,ResultCodeEnum.CAR_NOT_EXIST);

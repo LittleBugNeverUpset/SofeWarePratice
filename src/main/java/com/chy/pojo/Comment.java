@@ -9,7 +9,7 @@ import lombok.Data;
 /**
  * @TableName comment
  */
-@TableName(value ="comment")
+
 @Data
 public class Comment implements Serializable {
     @TableId

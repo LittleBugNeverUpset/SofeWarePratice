@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.pojo.Car;
 import com.chy.pojo.User;
+import com.chy.service.UserLogsService;
 import com.chy.service.UserService;
 import com.chy.mapper.UserMapper;
 import com.chy.utils.JwtHelper;
@@ -33,6 +34,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private JwtHelper jwtHelper;
     @Autowired
     private  UserMapper userMapper;
+    @Autowired
+    UserLogsService userLogsService;
 
     /**
      * 登录业务实现
@@ -63,7 +66,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
             Map data = new HashMap();
             data.put("token",token);
-
+            userLogsService.generateUserLogs(loginUser.getUserId(),"Login && get Token",token);
             return Result.ok(data);
         }
 
@@ -94,6 +97,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             user.getUserPassword();
             Map data = new HashMap();
             data.put("loginUser",user);
+            userLogsService.generateUserLogs(user.getUserId(),"Get User Info",user.toString());
             return Result.ok(data);
         }
 
@@ -115,7 +119,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (user != null){
             return Result.build(null,ResultCodeEnum.USERNAME_USED);
         }
-
         return Result.ok(null);
     }
     @Override
@@ -170,6 +173,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         // 获取更新后的用户信息
         User updatedUser = userMapper.selectById(userId);
+        userLogsService.generateUserLogs(updatedUser.getUserId(),"Update User Info",updatedUser.toString() + "---Update To--->" + user);
         Map<String, Object> data = new HashMap<>();
         data.put("loginUser", updatedUser);
 
@@ -204,6 +208,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (user != null) {
             user.setIsDeleted(1);  // 设置为已删除
             userMapper.updateById(user);
+            userLogsService.generateUserLogs(user.getUserId(),"Delete User Account",user.toString());
             return Result.ok(user);
         }
 

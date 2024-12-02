@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chy.mapper.UserLogsMapper">
+
+    <resultMap id="BaseResultMap" type="com.chy.pojo.UserLogs">
+            <id property="userLogId" column="user_log_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="operationType" column="operation_type" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="timestamp" column="timestamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_log_id,user_id,operation_type,
+        description,timestamp
+    </sql>
+</mapper>
