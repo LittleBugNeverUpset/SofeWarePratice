@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.mapper.AdminMapper;
 import com.chy.pojo.Admin;
 import com.chy.pojo.Captcha;
+import com.chy.service.AdminLogsService;
 import com.chy.service.CaptchaService;
 import com.chy.mapper.CaptchaMapper;
 import com.chy.utils.JwtHelper;
@@ -33,6 +34,8 @@ public class CaptchaServiceImpl extends ServiceImpl<CaptchaMapper, Captcha>
     private AdminMapper adminMapper;
     @Autowired
     private JwtHelper jwtHelper;
+    @Autowired
+    private AdminLogsService adminLogsService;
 
 
     @Override
@@ -57,10 +60,12 @@ public class CaptchaServiceImpl extends ServiceImpl<CaptchaMapper, Captcha>
         captcha.setAdminLevel(adminLevel);
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         captcha.setExpirationTime(Timestamp.valueOf(LocalDateTime.now().plusMinutes(120)));              // 设置过期时间为120分钟
+        adminLogsService.generateAdminLogs(adminId,"Generate Admin Regist Captcha",captchaCode.toString());
         captcha.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
         captchaMapper.insert(captcha);
         return Result.build(captcha, ResultCodeEnum.SUCCESS);
     }
+
 }
 
 

@@ -17,4 +17,6 @@ public interface FacilitiesService extends IService<Facilities> {
     Result addFacilities(String token, List<Facilities> facilities) ;
 
     Result getAllFacilities(String token);
+
+    Result deleteFacilitiesNyId(String token, int facilitiesId);
 }

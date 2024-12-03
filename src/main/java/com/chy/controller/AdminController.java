@@ -33,6 +33,10 @@ public class AdminController {
     private ParkingSlotService parkingSlotService;
     @Autowired
     private CaptchaService captchaService;
+    @Autowired
+    private UserLogsService userLogsService;
+    @Autowired
+    private AdminLogsService adminLogsService;
 
     /**
      * 管理员自身操作模块
@@ -89,14 +93,22 @@ public class AdminController {
         Result result = parkinglotService.addParkinglots(token, parkinglots);
         return result;
     }
-
+    @GetMapping("Parkinglot")
+    public Result parkinglot(@RequestHeader String token){
+        Result result = parkinglotService.getAllParkinglots(token);
+        return result;
+    }
+    @DeleteMapping("Parkinglot")
+    public Result deleteParkinglot(@RequestHeader String token, int parkinglotId){
+        Result result = parkinglotService.deleteParkinglotById(token,parkinglotId);
+        return result;
+    }
     @Operation(summary = "管理员批量录入停车位(已实现)", description = "一个停车场的众多停车位（未实现）")
     @PostMapping("ParkingSlot")
     public Result parkingSlot(@RequestHeader String token, @Param("ParkinglogId") Integer parkinglotID,@RequestBody List<ParkingSlot> parkingSlots){
         Result result = parkingSlotService.addParkingSlots(token,parkinglotID, parkingSlots);
         return result;
     }
-
     @Operation(summary = "管理员获取所有用户列表(已实现)", description = "(已实现)")
     @GetMapping("allUsersList")
     public Result getUsersList(@RequestHeader String token){
@@ -115,13 +127,28 @@ public class AdminController {
         Result result = facilitiesService.addFacilities(token,facilities);
         return result;
     }
-
     @Operation(summary = "管理员获取所有便民设施列表(已实现)", description = "(已实现)")
     @GetMapping("allFacilities")
     public Result getAllFacilities(@RequestHeader String token){
         Result result = facilitiesService.getAllFacilities(token);
         return result;
     }
+    @DeleteMapping("facilities")
+    public Result deleteFacilities(@RequestHeader String token, int facilitiesId){
+        Result result = facilitiesService.deleteFacilitiesNyId(token,facilitiesId);
+        return result;
+    }
+    @GetMapping("userLogs")
+    public Result getUserLogs(@RequestHeader String token){
+        Result result = userLogsService.getAllUserLogs(token);
+        return result;
+    }
+    @GetMapping("adminLogs")
+    public Result getAdminLogs(@RequestHeader String token){
+        Result result= adminLogsService.getAllAdminLogs(token);
+        return result;
+    }
+
 
     /**
      * 日志模块

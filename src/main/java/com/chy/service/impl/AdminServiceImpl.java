@@ -10,6 +10,7 @@ import com.chy.pojo.Admin;
 import com.chy.pojo.Captcha;
 import com.chy.pojo.Car;
 import com.chy.pojo.User;
+import com.chy.service.AdminLogsService;
 import com.chy.service.AdminService;
 import com.chy.mapper.AdminMapper;
 import com.chy.service.CaptchaService;
@@ -17,9 +18,11 @@ import com.chy.utils.JwtHelper;
 import com.chy.utils.MD5Util;
 import com.chy.utils.Result;
 import com.chy.utils.ResultCodeEnum;
+import org.aspectj.lang.annotation.AdviceName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,16 +46,15 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
     private  JwtHelper jwtHelper;
     @Autowired
     private CaptchaMapper captchaMapper;
+    @Autowired
+    private AdminLogsService adminLogsService;
 
 
     @Override
     public Result login(Admin admin) {
         //根据账号查询
-//        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-//        queryWrapper.eq(User::getUserName,user.getUserName());
         LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Admin::getAdminName , admin.getAdminName());
-//        User loginUser = userMapper.selectOne(queryWrapper);
         Admin loginAdmin = adminMapper.selectOne(queryWrapper);
         //账号判断
         if (loginAdmin == null) {
@@ -66,11 +68,13 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         {
             //账号密码正确
             //根据用户唯一标识生成token
+            Integer adminId = loginAdmin.getAdminId();
             String token = jwtHelper.createToken(Long.valueOf(loginAdmin.getAdminId()));
 
             Map data = new HashMap();
             data.put("token",token);
-
+            Date date = new Date();
+            adminLogsService.generateAdminLogs(adminId,"Login","Login At " +date.toString());
             return Result.ok(data);
         }
 
@@ -125,10 +129,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
             admin.setAdminPassword(MD5Util.encrypt(admin.getAdminPassword()));
             admin.setAdminPermissionLevel(captcha1.getAdminLevel());
             captcha1.setIsUsed(1);
+
             captchaMapper.updateById(captcha1);
             int rows = adminMapper.insert(admin);
             System.out.println("rows = " + rows);
-
+            adminLogsService.generateAdminLogs(0,"Generate Low Level Admin",admin.toString());
             return Result.ok(null);
         }
         return Result.build(null,ResultCodeEnum.INVALID_PARAMS);
@@ -141,8 +146,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
             //true过期,直接返回未登录
             return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
         }
+        int adminId = jwtHelper.getUserId(token).intValue();
 //        QueryWrapper<User> queryWapper = new QueryWrapper<>();
         List<User> users = userMapper.selectList(null);
+        adminLogsService.generateAdminLogs(adminId,"get All Users List",users.toString());
         return Result.build(users,ResultCodeEnum.SUCCESS);
     }
 
@@ -153,8 +160,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
             //true过期,直接返回未登录
             return Result.build(null,ResultCodeEnum.UNAUTHROIZED);
         }
+        int adminId = jwtHelper.getUserId(token).intValue();
 //        QueryWrapper<User> queryWapper = new QueryWrapper<>();
         List<Car> cars = carMapper.selectList(null);
+        adminLogsService.generateAdminLogs(adminId,"get All Cars List",cars.toString());
         return Result.build(cars,ResultCodeEnum.SUCCESS);
     }
 

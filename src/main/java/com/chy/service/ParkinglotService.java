@@ -14,4 +14,8 @@ import java.util.List;
 public interface ParkinglotService extends IService<Parkinglot> {
 
     Result addParkinglots(String token, List<Parkinglot> parkinglots);
+
+    Result getAllParkinglots(String token);
+
+    Result deleteParkinglotById(String token, int parkinglotId);
 }

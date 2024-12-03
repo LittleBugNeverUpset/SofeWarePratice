@@ -1,8 +1,11 @@
 package com.chy.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.pojo.Parkinglot;
+import com.chy.service.AdminLogsService;
 import com.chy.service.ParkinglotService;
 import com.chy.mapper.ParkinglotMapper;
 import com.chy.utils.JwtHelper;
@@ -26,6 +29,8 @@ public class ParkinglotServiceImpl extends ServiceImpl<ParkinglotMapper, Parking
     private ParkinglotMapper parkinglotMapper;
     @Autowired
     private JwtHelper jwtHelper;
+    @Autowired
+    private AdminLogsService adminLogsService;
 
     @Override
     public Result addParkinglots(String token, List<Parkinglot> parkinglots) {
@@ -63,6 +68,42 @@ public class ParkinglotServiceImpl extends ServiceImpl<ParkinglotMapper, Parking
         // 如果所有停车场插入成功，返回成功信息
         return Result.build(null, ResultCodeEnum.SUCCESS);
     }
+
+    @Override
+    public Result getAllParkinglots(String token) {
+        // 校验 token 是否过期
+        if (jwtHelper.isExpiration(token)) {
+            return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
+        }
+        // 获取当前管理员的 ID
+        int adminId = jwtHelper.getUserId(token).intValue();
+        Page<Parkinglot> page = new Page<>(5,10);
+        LambdaQueryWrapper<Parkinglot> queryWrapper = new LambdaQueryWrapper<>();
+        List<Parkinglot> parkinglots = parkinglotMapper.selectList(queryWrapper);
+        adminLogsService.generateAdminLogs(adminId,"getAllParkinglots","Amount:" + parkinglots.size());
+        return Result.build(parkinglots,ResultCodeEnum.SUCCESS);
+    }
+
+    @Override
+    public Result deleteParkinglotById(String token, int parkinglotId) {
+        // 校验 token 是否过期
+        if (jwtHelper.isExpiration(token)) {
+            return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
+        }
+        // 获取当前管理员的 ID
+        int adminId = jwtHelper.getUserId(token).intValue();
+        LambdaQueryWrapper<Parkinglot> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Parkinglot::getParkinglotId, parkinglotId);
+        Parkinglot parkinglot = parkinglotMapper.selectOne(queryWrapper);
+        if (parkinglot != null) {
+            parkinglot.setIsDeleted(1);
+            parkinglotMapper.updateById(parkinglot);
+            adminLogsService.generateAdminLogs(adminId,"Delete Parkinglot",parkinglot.toString());
+            return Result.build(parkinglot, ResultCodeEnum.SUCCESS);
+        }
+        return Result.build(null, ResultCodeEnum.UPDATE_FIELD_FAILED);
+    }
+
 }
 
 

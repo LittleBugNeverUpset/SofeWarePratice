@@ -2,6 +2,7 @@ package com.chy.service;
 
 import com.chy.pojo.UserLogs;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chy.utils.Result;
 
 /**
 * @author littlebug
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserLogsService extends IService<UserLogs> {
     public void generateUserLogs(Integer userId,String type,String description);
 
+    Result getAllUserLogs(String token);
 }

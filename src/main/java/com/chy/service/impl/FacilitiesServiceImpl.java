@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.pojo.Facilities;
 import com.chy.pojo.User;
-import com.chy.service.FacilitiesService;
+import com.chy.service.*;
 import com.chy.mapper.FacilitiesMapper;
-import com.chy.service.UserLogsService;
 import com.chy.utils.JwtHelper;
 import com.chy.utils.Result;
 import com.chy.utils.ResultCodeEnum;
@@ -27,6 +26,7 @@ public class FacilitiesServiceImpl extends ServiceImpl<FacilitiesMapper, Facilit
     @Autowired private FacilitiesMapper facilitiesMapper;
     @Autowired private JwtHelper jwtHelper;
     @Autowired private UserLogsService userLogsService;
+    @Autowired private AdminLogsService adminLogsService;
 
     @Override
     public Result addFacilities(String token, Facilities facilities) {
@@ -61,9 +61,11 @@ public class FacilitiesServiceImpl extends ServiceImpl<FacilitiesMapper, Facilit
             }
         }
         if (failInsterList.size() > 0) {
+            adminLogsService.generateAdminLogs(adminId,"Insert Facilities Faild",failInsterList.toString());
             return Result.build(failInsterList, ResultCodeEnum.INSERT_FAILED);
-        }
 
+        }
+        adminLogsService.generateAdminLogs(adminId,"Insert Facilities Success",facilitiesList.toString());
         return Result.build(null,ResultCodeEnum.SUCCESS);
     }
 
@@ -75,8 +77,28 @@ public class FacilitiesServiceImpl extends ServiceImpl<FacilitiesMapper, Facilit
         int adminId = jwtHelper.getUserId(token).intValue();
         List<Facilities> facilities = facilitiesMapper.selectList(null);
 //        userLogsService.generateUserLogs();
+        adminLogsService.generateAdminLogs(adminId,"Get All Facilities",facilities.toString());
         return Result.build(facilities,ResultCodeEnum.SUCCESS);
     }
+
+    @Override
+    public Result deleteFacilitiesNyId(String token, int facilitiesId) {
+        if (jwtHelper.isExpiration(token)) {
+            return Result.build(null, ResultCodeEnum.UNAUTHROIZED);
+        }
+        int adminId = jwtHelper.getUserId(token).intValue();
+        LambdaQueryWrapper<Facilities> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Facilities::getFacilitiesId, facilitiesId);
+        Facilities facilities = facilitiesMapper.selectOne(queryWrapper);
+        if (facilities != null) {
+            facilities.setIsDeleted(1);
+            facilitiesMapper.updateById(facilities);
+            adminLogsService.generateAdminLogs(adminId,"Delete Facilitie By Id", facilities.toString());
+            return Result.build(facilities,ResultCodeEnum.SUCCESS);
+        }
+        return Result.build(null,ResultCodeEnum.UPDATE_FIELD_FAILED);
+    }
+
 }
 
 

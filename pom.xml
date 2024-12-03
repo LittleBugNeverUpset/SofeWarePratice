@@ -78,6 +78,11 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>3.5.9</version>
+        </dependency>
     </dependencies>
     <!--    SpringBoot应用打包插件-->
     <build>

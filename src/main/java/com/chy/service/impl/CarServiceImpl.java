@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chy.mapper.UserMapper;
 import com.chy.pojo.Car;
 import com.chy.pojo.User;
+import com.chy.service.AdminService;
 import com.chy.service.CarService;
 import com.chy.mapper.CarMapper;
 import com.chy.service.UserLogsService;
@@ -28,6 +29,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car>
     private JwtHelper jwtHelper;
     @Autowired private UserMapper userMapper;
     @Autowired private UserLogsService userLogsService;
+    @Autowired private AdminService adminService;
 
     @Override
     public Result bindCarToUser(Car car, String token) {
